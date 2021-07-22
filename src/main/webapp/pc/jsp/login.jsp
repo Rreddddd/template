@@ -3,7 +3,7 @@
 <head>
     <title>登录</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/global/iconfont/iconfont.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/base.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-base.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/login.css"/>
     <script src="${pageContext.request.contextPath}/global/jquery-1.11.3.js"></script>
     <script src="${pageContext.request.contextPath}/pc/js/login.js"></script>
@@ -27,7 +27,7 @@
     <div class="login-tool">
         <label class="edit-checkbox-wrapper">
             <input type="checkbox" id="remember"/>
-            <span>记住</span>
+            <span>记住用户</span>
         </label>
     </div>
     <div class="login-btn-row">

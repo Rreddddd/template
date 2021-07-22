@@ -6,6 +6,7 @@ $(function () {
         if (!clickable) {
             return;
         }
+        localStorage.setItem("remember", remember[0].checked);
         clickable = false;
         let username = user_name.val().trim();
         if (!username) {
@@ -31,6 +32,7 @@ $(function () {
             dataType: "json",
             success: function (msg) {
                 if (msg.errorCode === 0) {
+                    localStorage.setItem("username", username);
                     window.location.href = "/home";
                 } else {
                     displayWarn(msg.msg || "登录失败");
@@ -46,12 +48,13 @@ $(function () {
     user_name = $("#user-name").on("focus", function () {
         user_name.removeClass("warn");
         hideWarn();
-    });
+    }).val(localStorage.getItem("username") || "");
     user_pwd = $("#user-pwd").on("focus", function () {
         user_pwd.removeClass("warn");
         hideWarn();
     });
     remember = $("#remember");
+    remember[0].checked = localStorage.getItem("remember") === "true";
     warn_row = $("#warn-row");
     warn_msg = $("#warn-msg");
 });

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "887924",
+      "name": "设置 (1)",
+      "font_class": "shezhi1",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
       "icon_id": "1185481",
       "name": "warning",
       "font_class": "warning",

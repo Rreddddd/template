@@ -1,0 +1,124 @@
+.container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 2px;
+}
+.container>.header{
+    display: flex;
+    flex: 0 0 4px;
+    transition: 100ms ease-in;
+}
+.container>.header>*{
+    display: none !important;
+}
+.container>.header,.container>.context>.menu>.toolbar>.handrail{
+    background-color: #26282a;
+    border: 2px solid transparent;
+}
+.container>.header.hover,.container>.context>.menu>.toolbar>.handrail.hover{
+    border-color: #333638;
+}
+.container>.header.show{
+    flex-basis: 200px;
+    padding: 25px 35px 35px 35px;
+}
+.container>.header.show>*{
+    display: flex !important;
+}
+.container>.header>.information{
+    display: flex;
+    flex: 1 1 50%;
+}
+.container>.header>.information>.head-img{
+    flex: 0 0 126px;
+    height: 126px;
+    border-radius: 100%;
+    background-color: red;
+}
+.container>.header>.information>.feature{
+    flex: 1 1 100%;
+    margin-left: 18px;
+}
+.container>.header>.information>.feature>.text{
+    height: 50%;
+    padding-top: 6px;
+}
+.container>.header>.information>.feature .name{
+    width: fit-content;
+    font-size: 20px;
+    color: #dec6e6;
+    position: relative;
+}
+.container>.header>.information>.feature .name::after{
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    background-color: #7d6165;
+    position: absolute;
+    top: 9px;
+    right: -18px;
+}
+.container>.header>.information>.feature .name.online::after{
+    background-color: #68b928;
+}
+.container>.header>.information>.feature .dept{
+    font-size: 12px;
+    color: #7f7979;
+}
+.container>.header>.information>.feature>.setting{
+    height: 50%;
+    padding-top: 10px;
+}
+.container>.header>.information>.feature>.setting>button{
+    background-color: #353838;
+}
+.container>.header>.information>.feature>.setting>button:hover{
+    background-color: #363b3b;
+}
+.container>.header>.information>.feature>.setting>button:active{
+    background-color: #393d3d;
+}
+.container>.header>.notification{
+    flex: 1 1 50%;
+}
+.container>.context{
+    flex: 1 1 100%;
+    display: flex;
+}
+.container>.context>.menu{
+    height: 100%;
+    flex: 0 0 190px;
+    background-color: #2c2e2e;
+}
+.container>.context>.menu>.toolbar{
+    height: 68px;
+    line-height: 68px;
+    border-bottom: 1px solid #595e5f;
+    position: relative;
+    color: #f9f9f9;
+    padding-left: 33px;
+    font-size: 20px;
+}
+.container>.context>.menu>.toolbar>.handrail{
+    line-height: 68px;
+    width: 40px;
+    height: 52px;
+    position: absolute;
+    right: 30px;
+    top: -2px;
+    text-align: center;
+    color: #83848a;
+    border-top-width: 0;
+}
+.container>.context>.menu>.toolbar>.handrail>i{
+    cursor: pointer;
+}
+.container>.context>.activity{
+    height: 100%;
+    flex: 1 1 100%;
+    background-color: #efefef;
+}
