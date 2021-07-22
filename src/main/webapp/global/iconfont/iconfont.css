@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2688794 */
+  src: url('iconfont.woff2?t=1626791763317') format('woff2'),
+       url('iconfont.woff?t=1626791763317') format('woff'),
+       url('iconfont.ttf?t=1626791763317') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-warning:before {
+  content: "\e63b";
+}
+

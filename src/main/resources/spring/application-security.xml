@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+">
+
+    <security:authentication-manager alias="authenticationManager" erase-credentials="false">
+        <security:authentication-provider user-service-ref="myUserDetailsService">
+            <security:password-encoder ref="userPasswordEncoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <security:http auto-config="true"
+                   use-expressions="false"
+                   entry-point-ref="myAuthenticationEntryPoint"
+                   authentication-manager-ref="authenticationManager">
+        <security:access-denied-handler error-page="/error/403"/>
+
+        <security:intercept-url pattern="/error/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/global/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/pc/css/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/pc/js/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/pc/image/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <security:form-login login-page="/login"
+                             login-processing-url="/loginUser"
+                             authentication-success-handler-ref="myAuthenticationSuccessHandler"
+                             authentication-failure-handler-ref="myAuthenticationFailureHandler"/>
+        <security:csrf disabled="true"/>
+    </security:http>
+
+    <bean id="myUserDetailsService" class="security.MyUserDetailsService"/>
+    <bean id="userPasswordEncoder" class="security.UserPasswordEncoder">
+        <constructor-arg index="0" value="red"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="red" value-ref="redPasswordEncoder"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean id="redPasswordEncoder" class="org.springframework.security.crypto.factory.PasswordEncoderFactories"
+          factory-method="createDelegatingPasswordEncoder"/>
+    <bean id="myAuthenticationEntryPoint" class="security.MyAuthenticationEntryPoint"/>
+    <bean id="myAuthenticationSuccessHandler" class="security.handler.MyAuthenticationSuccessHandler"/>
+    <bean id="myAuthenticationFailureHandler" class="security.handler.MyAuthenticationFailureHandler"/>
+    <bean id="myAuthenticationProvider" class="security.provider.MyAuthenticationProvider"/>
+</beans>

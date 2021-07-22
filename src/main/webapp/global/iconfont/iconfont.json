@@ -1,0 +1,16 @@
+{
+  "id": "2688794",
+  "name": "web-template",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1185481",
+      "name": "warning",
+      "font_class": "warning",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    }
+  ]
+}
