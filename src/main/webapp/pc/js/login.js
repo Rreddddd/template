@@ -2,7 +2,7 @@ let user_name, user_pwd, remember, warn_row, warn_msg;
 $(function () {
     $("#login-window").addClass("show");
     let clickable = true;
-    $("#login-btn").on("click", function () {
+    let login_btn=$("#login-btn").on("click", function () {
         if (!clickable) {
             return;
         }
@@ -57,6 +57,12 @@ $(function () {
     remember[0].checked = localStorage.getItem("remember") === "true";
     warn_row = $("#warn-row");
     warn_msg = $("#warn-msg");
+
+    $(window).on("keydown",function(event){
+        if(event.keyCode===13){
+            login_btn.click();
+        }
+    });
 });
 
 function displayWarn(msg) {
