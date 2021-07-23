@@ -84,6 +84,104 @@
 }
 .container>.header>.notification{
     flex: 1 1 50%;
+    flex-direction: column;
+    color: #dec6e6;
+    padding-left: 72px;
+    border-left: 1px solid #595e5f;
+}
+.container>.header>.notification>.title{
+    font-size: 20px;
+}
+.container>.header>.notification>ul{
+    margin-top: 14px;
+    padding-left: 4px;
+    color: #ffffff;
+}
+.container>.header>.notification>ul>li{
+    margin-top: 6px;
+}
+.container>.header>.notification>ul>li>label>span{
+    margin-left: 8px;
+}
+.application-list{
+    padding: 30px 20px 20px 20px;
+    font-size: 14px;
+}
+.application-group{
+    display: none;
+}
+.expansion>.application-group{
+    display: block;
+}
+.application-item{
+    border-top: 1px solid #595e5f;
+}
+.application-item.first{
+    border-top-color: transparent;
+}
+.application-item-wrapper{
+    height: 48px;
+    padding-left: 10px;
+    line-height: 48px;
+    color: #979798;
+    cursor: pointer;
+    display: flex;
+}
+.application-item-wrapper:hover{
+    background-color: #2c3535;
+}
+.application-item-wrapper:active{
+    background-color: #2c3f3f;
+}
+.application-item-wrapper>.icon{
+    flex: 0 0 22px;
+}
+.application-item-wrapper>.name{
+    flex: 1 1 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.application-item-wrapper>.btn{
+    flex: 0 0 22px;
+    position: relative;
+}
+.application-item-wrapper.branch>.btn::before{
+    content: "";
+    display: inline-block;
+    width: 40%;
+    height: 1px;
+    background-color: #979798;
+    position: absolute;
+    top: 43%;
+    margin-top: -0.5px;
+    left: 0;
+    transform: rotate(45deg);
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.application-item-wrapper.branch>.btn::after{
+    content: "";
+    display: inline-block;
+    width: 40%;
+    height: 1px;
+    background-color: #979798;
+    position: absolute;
+    top: 57%;
+    margin-top: -0.5px;
+    left: 0;
+    transform: rotate(-45deg);
+    transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.application-item-wrapper.active{
+    color: #ffffff;
+}
+.application-item-wrapper.expand>.btn::before{
+    left: -14%;
+    top: 46%;
+}
+.application-item-wrapper.expand>.btn::after{
+    top: 46%;
+    left: 20%;
 }
 .container>.context{
     flex: 1 1 100%;
@@ -121,4 +219,20 @@
     height: 100%;
     flex: 1 1 100%;
     background-color: #efefef;
+    display: flex;
+    flex-direction: column;
+}
+.container>.context>.activity>.toolbar{
+    flex: 0 0 68px;
+    background-color: #ffffff;
+}
+.container>.context>.activity>.route{
+    flex: 0 0 30px;
+    margin-top: 2px;
+    background-color: #f9f9f9;
+}
+.container>.context>.activity>.panel-container{
+    flex: 1 1 100%;
+    width: 100%;
+    padding: 10px 20px;
 }

@@ -24,7 +24,21 @@
             </div>
         </div>
         <div class="notification">
-            <div>通知</div>
+            <div class="title">通知</div>
+            <ul>
+                <li>
+                    <label>
+                        <input type="checkbox"/>
+                        <span>消息</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox"/>
+                        <span>事件</span>
+                    </label>
+                </li>
+            </ul>
         </div>
     </div>
     <div class="context">
@@ -35,9 +49,16 @@
                     <i class="iconfont icon-shezhi1"></i>
                 </div>
             </div>
+            <div class="application-list expansion">
+
+            </div>
         </div>
         <div class="activity">
-
+            <div class="toolbar"></div>
+            <div class="route"></div>
+            <div class="panel-container">
+                <div style="width: 100%;height: 100%;background-color: #ffffff"></div>
+            </div>
         </div>
     </div>
 </div>

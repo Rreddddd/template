@@ -69,7 +69,20 @@ input[type='checkbox'] {
     top: 2px;
 }
 
-button.form-editor{
+/*基础元素*/
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+label > input[type='checkbox'] {
+    position: relative;
+    top: 2px;
+}
+
+button.form-editor {
     cursor: pointer;
     color: #eee7e7;
     font-size: 12px;
@@ -79,13 +92,16 @@ button.form-editor{
     padding: 6px 12px;
     border-radius: 1px;
 }
-button.form-editor:disabled{
+
+button.form-editor:disabled {
     cursor: not-allowed;
     opacity: 0.5;
 }
-button.form-editor.add{
+
+button.form-editor.add {
     background-color: #68b928;
 }
-button.form-editor.add2{
+
+button.form-editor.add2 {
     background-color: #508f1e;
 }
