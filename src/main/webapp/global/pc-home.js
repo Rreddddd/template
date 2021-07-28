@@ -42,7 +42,7 @@
                 container: container,
                 header: container.find(">.header"),
                 menu: container.find(">.context>.menu"),
-                handrail: container.find(".handrail"),
+                handrail: container.find(".handrail")
             };
             self.jqElements.handrail.find(">i").on({
                 "click": function () {
@@ -84,6 +84,41 @@
                     item.addClass("active");
                 }
             });
+
+            self.jqElements.activity = self.jqElements.container.find(">.context>.activity");
+            self.jqElements.activity.find(".toolbar .menu-btn").on("click", function () {
+                self.toggleMenu();
+            });
+
+            let self_name = self.jqElements.activity.find(".self-info .name").on("click", function () {
+                if (self_name.hasClass("active")) {
+                    self_name.removeClass("active");
+                    self_name.popWindow("push");
+                } else {
+                    self_name.addClass("active");
+                    self_name.popWindow("pop");
+                }
+            });
+            self_name.popWindow({
+                right : 15
+            });
+        },
+        toggleMenu: function () {
+            let self = this;
+            let state = self.jqElements.container.hasClass("pack-menu");
+            if (state) {
+                self.pullMenu();
+            } else {
+                self.packMenu();
+            }
+        },
+        packMenu: function () {
+            let self = this;
+            self.jqElements.container.addClass("pack-menu");
+        },
+        pullMenu: function () {
+            let self = this;
+            self.jqElements.container.removeClass("pack-menu");
         }
     };
 
@@ -125,7 +160,7 @@
             first = false
             let children = app.apps;
             item.append('<div class="application-item-wrapper' + (children && children.length > 0 ? ' branch' : '') + '" data-item-id="' + genID() + '">' +
-                '<div class="icon' + (' '+app.iconClass || '') + '"></div>' +
+                '<div class="icon' + (' ' + app.iconClass || '') + '"></div>' +
                 '<div class="name">' + app.name + '</div>' +
                 '<div class="btn"></div>' +
                 '</div>');

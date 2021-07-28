@@ -1,8 +1,8 @@
-let user_name, user_pwd, remember, warn_row, warn_msg;
+let user_name, user_pwd, captcha, remember, warn_row, warn_msg;
 $(function () {
     $("#login-window").addClass("show");
     let clickable = true;
-    let login_btn=$("#login-btn").on("click", function () {
+    let login_btn = $("#login-btn").on("click", function () {
         if (!clickable) {
             return;
         }
@@ -22,20 +22,35 @@ $(function () {
             clickable = true;
             return;
         }
+        let verifyCode = captcha.val().trim();
+        if (!verifyCode) {
+            displayWarn("请填写验证码");
+            captcha.addClass("warn");
+            clickable = true;
+            return;
+        }
         $.ajax({
             type: "post",
             url: "/loginUser",
             data: {
                 username: username,
                 password: userPwd,
+                verifyCode: verifyCode
             },
             dataType: "json",
             success: function (msg) {
                 if (msg.errorCode === 0) {
                     localStorage.setItem("username", username);
                     window.location.href = "/home";
-                } else {
+                } else if (msg.errorCode === 1) {
                     displayWarn(msg.msg || "登录失败");
+                    clickable = true;
+                } else {
+                    if (msg.errorCode === 3) {
+                        captcha.val("");
+                        captcha_img.click();
+                    }
+                    displayWarn(msg.msg || "验证码错误");
                     clickable = true;
                 }
             },
@@ -53,13 +68,19 @@ $(function () {
         user_pwd.removeClass("warn");
         hideWarn();
     });
+    captcha = $("#captcha").on("focus", function () {
+        user_pwd.removeClass("warn");
+        hideWarn();
+    });
     remember = $("#remember");
     remember[0].checked = localStorage.getItem("remember") === "true";
     warn_row = $("#warn-row");
     warn_msg = $("#warn-msg");
-
-    $(window).on("keydown",function(event){
-        if(event.keyCode===13){
+    let captcha_img = $("#captcha-img").on("click", function () {
+        captcha_img.attr("src", "/captcha?n=" + new Date().getTime());
+    });
+    $(window).on("keydown", function (event) {
+        if (event.keyCode === 13) {
             login_btn.click();
         }
     });

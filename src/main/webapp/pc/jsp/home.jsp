@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-base.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-home.css"/>
     <script src="${pageContext.request.contextPath}/global/jquery-1.11.3.js"></script>
+    <script src="${pageContext.request.contextPath}/global/pc-base.js"></script>
     <script src="${pageContext.request.contextPath}/global/pc-home.js"></script>
 </head>
 <body>
@@ -44,7 +45,7 @@
     <div class="context">
         <div class="menu">
             <div class="toolbar">
-                <span>Rred</span>
+                <span class="company-icon">Rred</span>
                 <div class="handrail">
                     <i class="iconfont icon-shezhi1"></i>
                 </div>
@@ -54,7 +55,15 @@
             </div>
         </div>
         <div class="activity">
-            <div class="toolbar"></div>
+            <div class="toolbar">
+                <div class="toolbar-item menu-btn left">
+                    <i class="menu-icon"></i>
+                </div>
+                <div class="toolbar-item self-info right">
+                    <div class="head-img"></div>
+                    <span class="name">而对</span>
+                </div>
+            </div>
             <div class="route"></div>
             <div class="panel-container">
                 <div style="width: 100%;height: 100%;background-color: #ffffff"></div>

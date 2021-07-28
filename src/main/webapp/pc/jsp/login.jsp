@@ -24,6 +24,12 @@
             <input class="edit-control line-input" type="password" id="user-pwd" placeholder="输入用户密码"/>
         </label>
     </div>
+    <div class="form-row captcha-row">
+        <label class="edit-wrapper single">
+            <input class="edit-control line-input" type="text" id="captcha" placeholder="输入验证码"/>
+        </label>
+        <img src="${pageContext.request.contextPath}/captcha" alt="暂无图片" id="captcha-img"/>
+    </div>
     <div class="login-tool">
         <label class="edit-checkbox-wrapper">
             <input type="checkbox" id="remember"/>

@@ -69,3 +69,13 @@ body {
 .warn-row.show {
     visibility: visible;
 }
+
+.captcha-row>.edit-wrapper{
+    width: fit-content;
+    float: left;
+}
+
+.captcha-row img{
+    margin-left: 12px;
+    cursor: pointer;
+}
