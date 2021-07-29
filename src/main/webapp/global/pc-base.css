@@ -109,11 +109,10 @@ button.form-editor.add2 {
 /*抽屉窗口*/
 .pop-window-container{
     position: fixed;
-    width: 200px;
-    height: 200px;
     background-color: #ffffff;
     box-shadow: 1px 1px 8px #e2e2e2;
     border-radius: 5px;
+    transition: 300ms ease-in;
     z-index: 100;
     display: none;
 }

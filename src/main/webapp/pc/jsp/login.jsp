@@ -32,8 +32,8 @@
     </div>
     <div class="login-tool">
         <label class="edit-checkbox-wrapper">
-            <input type="checkbox" id="remember"/>
-            <span>记住用户</span>
+            <input type="checkbox" id="remember-me"/>
+            <span>记住</span>
         </label>
     </div>
     <div class="login-btn-row">

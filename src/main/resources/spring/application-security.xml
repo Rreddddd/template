@@ -29,6 +29,9 @@
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
         <security:form-login login-page="/login"
                              login-processing-url="/loginUser"/>
+        <security:logout logout-url="/logout" success-handler-ref="myLogoutSuccessHandler"/>
+        <security:remember-me token-repository-ref="myPersistentTokenRepository" user-service-ref="myUserDetailsService"
+                              token-validity-seconds="43200"/>
         <security:custom-filter ref="myUsernamePasswordAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
         <security:csrf disabled="true"/>
     </security:http>
@@ -45,9 +48,10 @@
     <bean id="redPasswordEncoder" class="org.springframework.security.crypto.factory.PasswordEncoderFactories"
           factory-method="createDelegatingPasswordEncoder"/>
     <bean id="myAuthenticationEntryPoint" class="security.MyAuthenticationEntryPoint"/>
+    <bean id="myAuthenticationProvider" class="security.provider.MyAuthenticationProvider"/>
+    <!--    登录处理器-->
     <bean id="myAuthenticationSuccessHandler" class="security.handler.MyAuthenticationSuccessHandler"/>
     <bean id="myAuthenticationFailureHandler" class="security.handler.MyAuthenticationFailureHandler"/>
-    <bean id="myAuthenticationProvider" class="security.provider.MyAuthenticationProvider"/>
     <!--    验证码过滤器-->
     <bean id="myUsernamePasswordAuthenticationFilter" class="security.filter.MyUsernamePasswordAuthenticationFilter">
         <property name="authenticationManager" ref="authenticationManager"/>
@@ -55,4 +59,8 @@
         <property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler"/>
         <property name="authenticationFailureHandler" ref="myAuthenticationFailureHandler"/>
     </bean>
+    <!--    记住我-->
+    <bean id="myPersistentTokenRepository" class="security.MyPersistentTokenRepository"/>
+    <!--    登出处理器-->
+    <bean id="myLogoutSuccessHandler" class="security.handler.MyLogoutSuccessHandler"/>
 </beans>

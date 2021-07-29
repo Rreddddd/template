@@ -20,3 +20,16 @@ CREATE TABLE `member`
 );
 insert into member
 values (null, -1, 'admin', '1', '超级管理员', 'cjgly,chaojiguanliyuan', null, null, now(), 0, 0, 0);
+-- 用户令牌
+DROP TABLE IF EXISTS `member_token`;
+CREATE TABLE `member_token` (
+                            `id`  int(11) NOT NULL ,
+                            `username`  varchar(50) NOT NULL ,
+                            `token`  varchar(64) NOT NULL ,
+                            `create_time`  datetime NOT NULL ,
+                            `last_used_time`  datetime NULL ,
+                            `valid`  bit NOT NULL ,
+                            PRIMARY KEY (`id`),
+                            INDEX `index1` (`username`) USING HASH,
+                            UNIQUE INDEX `index2` (`token`) USING HASH
+);

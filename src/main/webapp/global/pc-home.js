@@ -100,7 +100,13 @@
                 }
             });
             self_name.popWindow({
-                right : 15
+                containerClass: "logout-pop-window",
+                right: 15,
+                onInit: function (container) {
+                    $('<div class="logout-btn"/>').on("click", function () {
+                        window.location.href = "/logout";
+                    }).text("退出").appendTo(container);
+                }
             });
         },
         toggleMenu: function () {

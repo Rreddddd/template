@@ -332,12 +332,73 @@
     transform: rotate(-135deg);
 }
 .container>.context>.activity>.route{
+    display: flex;
     flex: 0 0 30px;
     margin-top: 2px;
     background-color: #f9f9f9;
+    padding: 4px 6px;
+    letter-spacing: 1px;
+    color: #7f7f86;
+}
+.container>.context>.activity>.route>.route-item{
+    height: 210%;
+    line-height: 22px;
+    cursor: pointer;
+    overflow: hidden;
+    transform: rotate(18deg) translate(-3px,-11px);
+}
+.container>.context>.activity>.route>.route-item>.route-item-wrapper{
+    width: 120%;
+    padding: 0 15px;
+    text-align: center;
+    transform: rotate(-18deg) translate(-7px, 8px);
+}
+.container>.context>.activity>.route>.route-item>.route-item-wrapper:hover{
+    color: #5f6466;
+    background-color: #f2f2f2;
+}
+.container>.context>.activity>.route>.route-item>.route-item-wrapper:active{
+    color: #555b5e;
+    background-color: #efefef;
+}
+.container>.context>.activity>.route>.route-item>.route-item-wrapper.active{
+    color: #4c5153 !important;
+    background-color: transparent !important;
+    cursor: initial;
+    font-weight: bold;
+}
+.container>.context>.activity>.route>.route-separation{
+    cursor: default;
+    width: 1px;
+    height: 12px;
+    margin: 5px 1px 0 1px;
+    background-color: #99999a;
+    padding: 0;
+    transform: rotate(20deg);
 }
 .container>.context>.activity>.panel-container{
     flex: 1 1 100%;
     width: 100%;
     padding: 10px 30px;
+}
+.container>.context>.activity>.panel-container>.panel-wrapper{
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff
+}
+
+.logout-pop-window{
+    padding: 5px 0;
+}
+.logout-btn{
+    text-align: center;
+    padding: 3px 34px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.logout-btn:hover{
+    background-color: #fbfbfb;
+}
+.logout-btn:active{
+    background-color: #f9f9f9;
 }

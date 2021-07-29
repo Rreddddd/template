@@ -1,4 +1,4 @@
-let user_name, user_pwd, captcha, remember, warn_row, warn_msg;
+let user_name, user_pwd, captcha, remember_me, warn_row, warn_msg;
 $(function () {
     $("#login-window").addClass("show");
     let clickable = true;
@@ -6,7 +6,6 @@ $(function () {
         if (!clickable) {
             return;
         }
-        localStorage.setItem("remember", remember[0].checked);
         clickable = false;
         let username = user_name.val().trim();
         if (!username) {
@@ -29,17 +28,20 @@ $(function () {
             clickable = true;
             return;
         }
+        let rememberMe = remember_me[0].checked;
         $.ajax({
             type: "post",
             url: "/loginUser",
             data: {
                 username: username,
                 password: userPwd,
-                verifyCode: verifyCode
+                verifyCode: verifyCode,
+                "remember-me": rememberMe
             },
             dataType: "json",
             success: function (msg) {
                 if (msg.errorCode === 0) {
+                    localStorage.setItem("remember_me", rememberMe);
                     localStorage.setItem("username", username);
                     window.location.href = "/home";
                 } else if (msg.errorCode === 1) {
@@ -72,8 +74,8 @@ $(function () {
         user_pwd.removeClass("warn");
         hideWarn();
     });
-    remember = $("#remember");
-    remember[0].checked = localStorage.getItem("remember") === "true";
+    remember_me = $("#remember-me");
+    remember_me[0].checked = localStorage.getItem("remember_me") === "true";
     warn_row = $("#warn-row");
     warn_msg = $("#warn-msg");
     let captcha_img = $("#captcha-img").on("click", function () {

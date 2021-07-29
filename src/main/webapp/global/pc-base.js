@@ -16,6 +16,9 @@
     PopWindow.prototype = {
         init: function () {
             let self = this;
+            if (self.option.containerClass) {
+                self.jqElements.container.addClass(self.option.containerClass);
+            }
         },
         push: function () {
             let self = this;
@@ -34,17 +37,15 @@
             let eleWidth = self.ele.width();
             let eleHeight = self.ele.height();
             if (containerWidth + left > windowWidth) {
-                left = left - containerWidth + self.option.right;
+                left = left - (containerWidth - eleWidth) + self.option.right;
             } else {
                 left += self.option.left;
             }
-            left += eleWidth + self.option.left;
             if (containerHeight + top > windowHeight) {
-                top = top - containerHeight + self.bottom;
+                top = top - (containerHeight - eleHeight) + self.bottom;
             } else {
-                top += self.option.top;
+                top += eleHeight + self.option.top;
             }
-            top += eleHeight;
             self.jqElements.container.addClass("pop");
             setTimeout(function () {
                 self.jqElements.container.css({
@@ -54,10 +55,15 @@
             }, 100);
         },
         defaultOption: {
+            containerClass: undefined,
             top: 0,
             left: 0,
             bottom: 0,
             right: 0,
+            width: -1,
+            height: -1,
+            horizontalDirection: "auto",
+            verticalDirection: "auto",
             onInit: function (container) {
 
             }

@@ -1,5 +1,6 @@
 package util;
 
+import entity.User;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,5 +34,9 @@ public abstract class Context {
 
     public static boolean loginStatus() {
         return !(getCurrentContext().getAuthentication() instanceof AnonymousAuthenticationToken);
+    }
+
+    public static User getUser() {
+        return null;
     }
 }

@@ -23,22 +23,25 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
         Object verifyState = httpServletRequest.getAttribute(Constant.LOGIN_VERIFY_STATUS);
         if (verifyState != null) {
             int _verifyState = (int) verifyState;
-            if (_verifyState == Constant.VERIFY_STATUS_FAIL) {
-                msgResult.setErrorCode(2);
-                msgResult.setMsg("验证码错误");
-            } else if (_verifyState == Constant.VERIFY_STATUS_EXPIRED) {
-                msgResult.setErrorCode(3);
-                msgResult.setMsg("验证码过期");
+            if (_verifyState != Constant.VERIFY_STATUS_SUCCEED) {
+                if (_verifyState == Constant.VERIFY_STATUS_FAIL) {
+                    msgResult.setErrorCode(2);
+                    msgResult.setMsg("验证码错误");
+                } else if (_verifyState == Constant.VERIFY_STATUS_EXPIRED) {
+                    msgResult.setErrorCode(3);
+                    msgResult.setMsg("验证码过期");
+                }
+                httpServletResponse.getOutputStream().write(new ObjectMapper().writeValueAsBytes(msgResult));
+                return;
             }
+        }
+        int status = userService.verifyAccountAndPassword(httpServletRequest.getParameter("username"), httpServletRequest.getParameter("password"));
+        if (status == 0) {
+            msgResult.setMsg("用户不存在");
+        } else if (status == 1) {
+            msgResult.setMsg("用户名或者密码错误");
         } else {
-            int status = userService.verifyAccountAndPassword(httpServletRequest.getParameter("username"), httpServletRequest.getParameter("password"));
-            if (status == 0) {
-                msgResult.setMsg("用户不存在");
-            } else if (status == 1) {
-                msgResult.setMsg("用户名或者密码错误");
-            } else {
-                msgResult.setMsg("系统错误");
-            }
+            msgResult.setMsg("系统错误");
         }
         httpServletResponse.getOutputStream().write(new ObjectMapper().writeValueAsBytes(msgResult));
     }

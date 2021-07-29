@@ -1,11 +1,20 @@
 package entity;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class User extends Member {
 
     private String account;
     private String password;
     private String phone;
     private String email;
+
+    private static final Map<String, User> cache = new HashMap<>();
+
+    public static User get(String account) {
+        return null;
+    }
 
     public User() {
         this.type = MemberType.USER.getType();
