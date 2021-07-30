@@ -30,8 +30,8 @@
         <security:form-login login-page="/login"
                              login-processing-url="/loginUser"/>
         <security:logout logout-url="/logout" success-handler-ref="myLogoutSuccessHandler"/>
-        <security:remember-me token-repository-ref="myPersistentTokenRepository" user-service-ref="myUserDetailsService"
-                              token-validity-seconds="43200"/>
+        <security:remember-me token-repository-ref="myPersistentTokenRepository"
+                              token-validity-seconds="259200"/>
         <security:custom-filter ref="myUsernamePasswordAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
         <security:csrf disabled="true"/>
     </security:http>
@@ -58,9 +58,16 @@
         <property name="filterProcessesUrl" value="/loginUser"/>
         <property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler"/>
         <property name="authenticationFailureHandler" ref="myAuthenticationFailureHandler"/>
+        <property name="rememberMeServices" ref="myRememberMeServices"/>
     </bean>
     <!--    记住我-->
     <bean id="myPersistentTokenRepository" class="security.MyPersistentTokenRepository"/>
+    <bean id="myRememberMeServices"
+          class="org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+        <constructor-arg name="key" value="0549e670-f108-11eb-ad98-507b9d9a683a"/>
+        <constructor-arg name="userDetailsService" ref="myUserDetailsService"/>
+        <constructor-arg name="tokenRepository" ref="myPersistentTokenRepository"/>
+    </bean>
     <!--    登出处理器-->
     <bean id="myLogoutSuccessHandler" class="security.handler.MyLogoutSuccessHandler"/>
 </beans>

@@ -13,17 +13,17 @@ public class MyPersistentTokenRepository implements PersistentTokenRepository {
     private MemberTokenService memberTokenService;
 
     @Override
-    public void createNewToken(PersistentRememberMeToken persistentRememberMeToken) {
+    public void createNewToken(PersistentRememberMeToken token) {
         System.out.println("");
     }
 
     @Override
-    public void updateToken(String s, String s1, Date date) {
+    public void updateToken(String series, String tokenValue, Date lastUsed) {
         System.out.println("");
     }
 
     @Override
-    public PersistentRememberMeToken getTokenForSeries(String s) {
+    public PersistentRememberMeToken getTokenForSeries(String series) {
         return null;
     }
 
