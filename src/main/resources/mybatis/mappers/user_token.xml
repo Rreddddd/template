@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserTokenDao">
+
+    <resultMap id="userToken" type="UserToken">
+        <id column="series" property="series"/>
+        <result column="username" property="username"/>
+        <result column="token" property="token"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="last_used_time" property="lastUsedTime" jdbcType="TIMESTAMP"/>
+        <result column="valid" property="valid"/>
+    </resultMap>
+
+    <select id="findValidBySeries" resultType="userToken">
+        select ut.series,
+               ut.username,
+               ut.token,
+               ut.create_time,
+               ut.last_used_time,
+               ut.valid
+        from user_token ut
+        where ut.valid
+          and ut.series = #{series}
+    </select>
+
+    <insert id="createNewToken" parameterType="UserToken">
+        insert into user_token(series, username, token, create_time, last_used_time, valid)
+        values (#{token.series}, #{token.username}, #{token.token}, #{token.createTime}, #{token.lastUsedTime},
+                #{token.valid})
+    </insert>
+
+    <update id="updateToken">
+        update user_token ut
+        set ut.token=#{token},
+            ut.last_used_time=#{lastUsedTime}
+        where ut.series = #{series}
+    </update>
+
+    <delete id="removeToken">
+        delete
+        from user_token
+        where username = #{username}
+    </delete>
+</mapper>

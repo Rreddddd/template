@@ -3,34 +3,36 @@
 <mapper namespace="dao.UserDao">
 
     <resultMap id="user" type="User">
-        <id column="id" property="id" javaType="int"/>
-        <result column="parent_id" property="parentId"/>
+        <id column="id" property="id"/>
         <result column="account" property="account"/>
         <result column="password" property="password"/>
         <result column="name" property="name"/>
-        <result column="spell" property="spell"/>
         <result column="phone" property="phone"/>
         <result column="email" property="email"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
-        <result column="type" property="type"/>
         <result column="freeze" property="freeze"/>
-        <result column="_order" property="order"/>
+        <association property="position" javaType="Position">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="visible" property="visible"/>
+        </association>
     </resultMap>
 
     <select id="findByAccount" parameterType="String" resultMap="user">
-        select m.id,
-               m.parent_id,
-               m.account,
-               m.password,
-               m.name,
-               m.spell,
-               m.phone,
-               m.email,
-               m.create_time,
-               m.type,
-               m.freeze,
-               m._order
-        from member m
-        where m.account = #{account}
+        select u.id,
+               u.account,
+               u.password,
+               u.name,
+               u.phone,
+               u.email,
+               u.create_time,
+               u.freeze,
+               u.position_id,
+               p.id,
+               p.name,
+               p.visible
+        from user u
+                 left join position p on u.position_id = p.id
+        where u.account = #{account}
     </select>
 </mapper>

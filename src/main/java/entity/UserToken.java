@@ -2,21 +2,30 @@ package entity;
 
 import java.util.Date;
 
-public class MemberToken {
+public class UserToken {
 
-    private int id;
+    private String series;
     private String username;
     private String token;
     private Date createTime;
     private Date lastUsedTime;
     private boolean valid;
 
-    public int getId() {
-        return id;
+    public UserToken(String series, String username, String token, Date createTime, Date lastUsedTime, boolean valid) {
+        this.series = series;
+        this.username = username;
+        this.token = token;
+        this.createTime = createTime;
+        this.lastUsedTime = lastUsedTime;
+        this.valid = valid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getSeries() {
+        return series;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
     }
 
     public String getUsername() {

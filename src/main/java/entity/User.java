@@ -1,23 +1,27 @@
 package entity;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User extends Member {
+public class User {
 
+    private int id;
     private String account;
     private String password;
+    private String name;
     private String phone;
     private String email;
+    private Date createTime;
+    private boolean freeze;
+    private Position position;
 
-    private static final Map<String, User> cache = new HashMap<>();
-
-    public static User get(String account) {
-        return null;
+    public int getId() {
+        return id;
     }
 
-    public User() {
-        this.type = MemberType.USER.getType();
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getAccount() {
@@ -36,6 +40,14 @@ public class User extends Member {
         this.password = password;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -50,5 +62,29 @@ public class User extends Member {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public boolean isFreeze() {
+        return freeze;
+    }
+
+    public void setFreeze(boolean freeze) {
+        this.freeze = freeze;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

@@ -1,8 +1,9 @@
 package security;
 
+import entity.UserToken;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import service.MemberTokenService;
+import service.UserTokenService;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -10,25 +11,29 @@ import java.util.Date;
 public class MyPersistentTokenRepository implements PersistentTokenRepository {
 
     @Resource
-    private MemberTokenService memberTokenService;
+    private UserTokenService userTokenService;
 
     @Override
     public void createNewToken(PersistentRememberMeToken token) {
-        System.out.println("");
+        userTokenService.createNewToken(new UserToken(token.getUsername(), token.getSeries(), token.getTokenValue(), token.getDate(), new Date(), true));
     }
 
     @Override
     public void updateToken(String series, String tokenValue, Date lastUsed) {
-        System.out.println("");
+        userTokenService.updateToken(series, tokenValue, lastUsed);
     }
 
     @Override
     public PersistentRememberMeToken getTokenForSeries(String series) {
-        return null;
+        UserToken userToken = userTokenService.findValidBySeries(series);
+        if (userToken == null) {
+            return null;
+        }
+        return new PersistentRememberMeToken(userToken.getUsername(), userToken.getSeries(), userToken.getToken(), userToken.getLastUsedTime());
     }
 
     @Override
     public void removeUserTokens(String username) {
-        memberTokenService.removeToken(username);
+        userTokenService.removeToken(username);
     }
 }

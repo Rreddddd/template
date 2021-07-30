@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`
 (
     `id`          int(11)     NOT NULL AUTO_INCREMENT,
-    `account`     varchar(50) NOT NULL COMMENT '登录用户名,非用户类型默认空字符串',
-    `password`    varchar(50) NOT NULL COMMENT '登录密码,非用户类型默认空字符串',
+    `account`     varchar(50) NOT NULL COMMENT '登录用户名',
+    `password`    varchar(50) NOT NULL COMMENT '登录密码',
     `name`        varchar(20) NOT NULL COMMENT '姓名',
     `phone`       int(11)     NULL COMMENT '移动电话号码',
     `email`       varchar(50) NULL COMMENT '邮箱',
@@ -12,7 +12,7 @@ CREATE TABLE `user`
     `freeze`      bit         NOT NULL DEFAULT b'0' COMMENT '是否冻结',
     `position_id` int         NULL COMMENT '职位/身份',
     PRIMARY KEY (`id`),
-    INDEX `index2` (`account`) USING HASH
+    UNIQUE INDEX `index1` (`account`) USING HASH
 );
 insert into user
 values (null, 'admin', '{red}{MD5}202cb962ac59075b964b07152d234b70', '超级管理员', null, null, now(), 0, 0);
@@ -63,7 +63,7 @@ CREATE TABLE `permission`
     PRIMARY KEY (`id`),
     INDEX `index1` (`auth_id`, `type`) USING BTREE
 );
--- 人员职位/身份关联
+-- 人员 职位/身份
 DROP TABLE IF EXISTS `position`;
 CREATE TABLE `position`
 (
