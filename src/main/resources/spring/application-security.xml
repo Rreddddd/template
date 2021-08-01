@@ -26,12 +26,15 @@
         <security:intercept-url pattern="/pc/js/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/pc/image/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 
+        <security:intercept-url pattern="/sys/*" access="ROLE_ADMIN"/>
         <security:intercept-url pattern="/**" access="ROLE_USER"/>
         <security:form-login login-page="/login"
                              login-processing-url="/loginUser"/>
         <security:logout logout-url="/logout" success-handler-ref="myLogoutSuccessHandler"/>
-        <security:remember-me token-repository-ref="myPersistentTokenRepository"
-                              token-validity-seconds="259200"/>
+        <security:remember-me remember-me-cookie="red_remember_template"
+                              token-repository-ref="myPersistentTokenRepository"
+                              authentication-success-handler-ref="myAuthenticationSuccessHandler"/>
+
         <security:custom-filter ref="myUsernamePasswordAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
         <security:csrf disabled="true"/>
     </security:http>
@@ -67,6 +70,8 @@
         <constructor-arg name="key" value="0549e670-f108-11eb-ad98-507b9d9a683a"/>
         <constructor-arg name="userDetailsService" ref="myUserDetailsService"/>
         <constructor-arg name="tokenRepository" ref="myPersistentTokenRepository"/>
+        <property name="cookieName" value="red_remember_template"/>
+        <property name="tokenValiditySeconds" value="259200"/>
     </bean>
     <!--    登出处理器-->
     <bean id="myLogoutSuccessHandler" class="security.handler.MyLogoutSuccessHandler"/>

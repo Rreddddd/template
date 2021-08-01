@@ -9,6 +9,6 @@ public class HomeController {
 
     @RequestMapping("/home")
     public ModelAndView home() {
-        return new ModelAndView("/pc/jsp/home");
+        return new ModelAndView("/jsp/home");
     }
 }

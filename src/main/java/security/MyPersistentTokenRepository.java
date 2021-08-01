@@ -15,12 +15,12 @@ public class MyPersistentTokenRepository implements PersistentTokenRepository {
 
     @Override
     public void createNewToken(PersistentRememberMeToken token) {
-        userTokenService.createNewToken(new UserToken(token.getUsername(), token.getSeries(), token.getTokenValue(), token.getDate(), new Date(), true));
+        userTokenService.createNewToken(new UserToken(token.getSeries(), token.getUsername(), token.getTokenValue(), new Date(), token.getDate(), true));
     }
 
     @Override
-    public void updateToken(String series, String tokenValue, Date lastUsed) {
-        userTokenService.updateToken(series, tokenValue, lastUsed);
+    public void updateToken(String series, String token, Date lastUsed) {
+        userTokenService.updateToken(series, token, lastUsed);
     }
 
     @Override

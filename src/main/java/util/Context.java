@@ -2,6 +2,7 @@ package util;
 
 import entity.User;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -32,11 +33,30 @@ public abstract class Context {
         return request.getSession();
     }
 
+    public static boolean isPhone() {
+        HttpServletRequest request = getRequest();
+        if (request == null) {
+            return false;
+        }
+        String[] deviceArray = new String[]{"android", "mac os", "windows phone"};
+        String userAgent = request.getHeader("user-agent").toLowerCase();
+        for (String s : deviceArray) {
+            if (userAgent.indexOf(s) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean loginStatus() {
         return !(getCurrentContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }
 
     public static User getUser() {
-        return null;
+        Authentication authentication = getCurrentContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+        return Users.get(authentication.getName());
     }
 }

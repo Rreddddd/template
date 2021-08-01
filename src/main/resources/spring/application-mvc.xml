@@ -16,8 +16,8 @@
         </property>
     </bean>
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean class="mvc.MyInternalResourceViewResolver">
         <property name="suffix" value=".jsp"/>
+        <property name="status" value="1"/>
     </bean>
-
 </beans>

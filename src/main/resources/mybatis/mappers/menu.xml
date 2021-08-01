@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.MenuDao">
+
+    <resultMap id="menu" type="Menu">
+        <id column="mId" property="id"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="mTitle" property="title"/>
+        <result column="icon_class" property="iconClass"/>
+        <result column="icon_color" property="iconColor"/>
+        <result column="_order" property="order"/>
+        <association property="module" javaType="Module">
+            <id column="moId" property="id"/>
+            <result column="moTitle" property="title"/>
+            <result column="url" property="url"/>
+        </association>
+    </resultMap>
+
+    <select id="findByParentId" resultMap="menu">
+        select m.id as mId,
+               m.parent_id,
+               m.title as mTitle,
+               m.icon_class,
+               m.icon_color,
+               m._order,
+               mo.id as moId,
+               mo.title as moTitle,
+               mo.url
+        from menu m
+                 left join module mo on m.module_id = mo.id
+        where m.parent_id = #{parentId}
+    </select>
+</mapper>

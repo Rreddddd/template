@@ -25,8 +25,7 @@
 
     <insert id="createNewToken" parameterType="UserToken">
         insert into user_token(series, username, token, create_time, last_used_time, valid)
-        values (#{token.series}, #{token.username}, #{token.token}, #{token.createTime}, #{token.lastUsedTime},
-                #{token.valid})
+        values (#{series}, #{username}, #{token}, #{createTime}, #{lastUsedTime}, #{valid})
     </insert>
 
     <update id="updateToken">

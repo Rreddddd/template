@@ -10,7 +10,7 @@ public interface UserTokenService {
 
     UserToken findValidBySeries(String series);
 
-    void updateToken(String series, String tokenValue, Date lastUsed);
+    void updateToken(String series, String token, Date lastUsed);
 
     void createNewToken(UserToken token);
 }

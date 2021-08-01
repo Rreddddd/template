@@ -11,6 +11,42 @@
     <tag>
         <name>template</name>
         <tag-class>jstl.Template</tag-class>
-        <body-content>scriptless</body-content>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>TemplatePlaceholder</name>
+        <tag-class>jstl.TemplatePlaceholder</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>templatePage</name>
+        <tag-class>jstl.TemplatePage</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>templateContent</name>
+        <tag-class>jstl.TemplateContent</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 </taglib>

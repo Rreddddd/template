@@ -14,8 +14,6 @@ CREATE TABLE `user`
     PRIMARY KEY (`id`),
     UNIQUE INDEX `index1` (`account`) USING HASH
 );
-insert into user
-values (null, 'admin', '{red}{MD5}202cb962ac59075b964b07152d234b70', '超级管理员', null, null, now(), 0, 0);
 -- 用户令牌
 DROP TABLE IF EXISTS `user_token`;
 CREATE TABLE `user_token`
@@ -72,5 +70,21 @@ CREATE TABLE `position`
     `visible` bit         NOT NULL,
     PRIMARY KEY (`id`)
 );
+
+insert into user
+values (null, 'admin', '{red}{MD5}202cb962ac59075b964b07152d234b70', 'Administrator', null, null, now(), 0, 1);
+
 insert into position
-values (0, '超级管理员', 0);
+values (null, '超级管理员', 0);
+
+insert into module
+values (1, '模块管理', '/sys/module');
+insert into module
+values (2, '导航管理', '/sys/menu');
+
+insert into menu
+values (1, -1, null, '系统管理', 'iconfont icon-xitongguanli', '#6666fb', 0);
+insert into menu
+values (2, 1, 1, '模块管理', 'iconfont icon-huaban61', '#7982fc', 1);
+insert into menu
+values (3, 1, 2, '导航管理', 'iconfont icon-daohang', '#0079ff', 2);

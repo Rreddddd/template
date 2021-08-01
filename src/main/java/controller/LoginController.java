@@ -19,7 +19,7 @@ public class LoginController {
         if (Context.loginStatus()) {
             return new ModelAndView("redirect:/home");
         } else {
-            return new ModelAndView("/pc/jsp/login");
+            return new ModelAndView("/jsp/login");
         }
     }
 

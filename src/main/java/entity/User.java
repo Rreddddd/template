@@ -1,12 +1,10 @@
 package entity;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class User {
 
-    private int id;
+    private Integer id;
     private String account;
     private String password;
     private String name;
@@ -16,11 +14,11 @@ public class User {
     private boolean freeze;
     private Position position;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -86,5 +84,25 @@ public class User {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public User copy() {
+        User newUser = new User();
+        newUser.setId(id);
+        newUser.setAccount(account);
+        newUser.setPassword(password);
+        newUser.setName(name);
+        newUser.setPhone(phone);
+        newUser.setEmail(email);
+        newUser.setCreateTime(createTime);
+        newUser.setFreeze(freeze);
+        if (position != null) {
+            Position newPosition = new Position();
+            newPosition.setId(position.getId());
+            newPosition.setName(position.getName());
+            newPosition.setVisible(position.isVisible());
+            newUser.setPosition(newPosition);
+        }
+        return newUser;
     }
 }

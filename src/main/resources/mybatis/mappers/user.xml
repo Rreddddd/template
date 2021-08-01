@@ -3,36 +3,81 @@
 <mapper namespace="dao.UserDao">
 
     <resultMap id="user" type="User">
-        <id column="id" property="id"/>
+        <id column="uId" property="id"/>
         <result column="account" property="account"/>
         <result column="password" property="password"/>
-        <result column="name" property="name"/>
+        <result column="uName" property="name"/>
         <result column="phone" property="phone"/>
         <result column="email" property="email"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="freeze" property="freeze"/>
         <association property="position" javaType="Position">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
+            <id column="pId" property="id"/>
+            <result column="pName" property="name"/>
             <result column="visible" property="visible"/>
         </association>
     </resultMap>
 
+    <sql id="fields">
+        u.id as uId,
+            u.account,
+            u.password,
+            u.name as uName,
+            u.phone,
+            u.email,
+            u.create_time,
+            u.freeze,
+            u.position_id,
+        p.id as pId,
+            p.name as pName,
+            p.visible
+    </sql>
+
+    <sql id="sets">
+        <if test="account!=null">
+            u.account=#{account},
+        </if>
+        <if test="password!=null">
+            u.password=#{password},
+        </if>
+        u.name=#{name},
+        u.phone=#{phone},
+        <if test="email!=null">
+            u.email=#{email},
+        </if>
+        u.freeze=#{freeze},
+        u.position_id=#{positionId},
+    </sql>
+
     <select id="findByAccount" parameterType="String" resultMap="user">
-        select u.id,
-               u.account,
-               u.password,
-               u.name,
-               u.phone,
-               u.email,
-               u.create_time,
-               u.freeze,
-               u.position_id,
-               p.id,
-               p.name,
-               p.visible
-        from user u
-                 left join position p on u.position_id = p.id
+        select
+        <include refid="fields"/>
+        from user as u
+        left join position as p on u.position_id = p.id
         where u.account = #{account}
     </select>
+
+    <select id="findAll" resultMap="user">
+        select
+        <include refid="fields"/>
+        from user as u
+        left join position as p on u.position_id = p.id
+    </select>
+
+    <insert id="add" parameterType="User">
+        insert into user
+        values (null, #{account}, #{password}, #{name}, #{phone}, #{email}, #{createTime}, #{freeze}, #{positionId});
+    </insert>
+
+    <update id="update" parameterType="User">
+        update user u
+        <include refid="sets"/>
+        where u.id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from user
+        where id = #{id}
+    </delete>
 </mapper>

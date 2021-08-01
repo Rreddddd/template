@@ -2,6 +2,7 @@ package dao;
 
 import entity.UserToken;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public interface UserTokenDao {
 
     UserToken findValidBySeries(String series);
 
-    void updateToken(String series, String token, Date lastUsedTime);
+    void updateToken(@Param("series") String series, @Param("token") String token, @Param("lastUsedTime") Date lastUsedTime);
 
     void createNewToken(UserToken token);
 }

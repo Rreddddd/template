@@ -8,6 +8,11 @@
          version="3.0">
     <display-name>lc-template</display-name>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404</location>
+    </error-page>
+
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

@@ -5,7 +5,9 @@ import dao.UserDao;
 import entity.User;
 import org.springframework.stereotype.Service;
 import service.UserService;
+import util.Users;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 @Service
@@ -13,6 +15,25 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserDao userDao;
+
+    @Override
+    public int add(User user) {
+        Integer id = user.getId();
+        if (user.getId() == null) {
+            id = userDao.add(user);
+            Users.put(user);
+        } else {
+            userDao.update(user);
+            Users.update(user);
+        }
+        return id;
+    }
+
+    @Override
+    public void delete(String account) {
+        userDao.delete(account);
+        Users.remove(account);
+    }
 
     @Override
     public User findByAccount(String account) {
@@ -34,5 +55,13 @@ public class UserServiceImpl implements UserService {
             return 0;
         }
         return user.getPassword().equals(password) ? 2 : 1;
+    }
+
+    /**
+     * 启动放入内存
+     */
+    @PostConstruct
+    private void initCache() {
+        Users.init(userDao.findAll());
     }
 }

@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1272631",
+      "name": "添加",
+      "font_class": "add-s",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "5984152",
+      "name": "修改",
+      "font_class": "xiugai",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "7407750",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "19494236",
+      "name": "删 除",
+      "font_class": "shanchu",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "9244890",
+      "name": "导航",
+      "font_class": "daohang",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "18533091",
+      "name": "系统管理",
+      "font_class": "xitongguanli",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "20012932",
+      "name": "模块",
+      "font_class": "huaban61",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "21900506",
       "name": "checkbox-sharp",
       "font_class": "checkbox-sharp",

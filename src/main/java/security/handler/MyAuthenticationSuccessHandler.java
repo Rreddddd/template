@@ -13,6 +13,11 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
-        httpServletResponse.getOutputStream().write(new ObjectMapper().writeValueAsBytes(MsgResult.success()));
+        String requestType = httpServletRequest.getHeader("X-Requested-With");
+        if ("XMLHttpRequest".equalsIgnoreCase(requestType)) {
+            httpServletResponse.getOutputStream().write(new ObjectMapper().writeValueAsBytes(MsgResult.success()));
+        } else {
+            httpServletResponse.sendRedirect("/home");
+        }
     }
 }

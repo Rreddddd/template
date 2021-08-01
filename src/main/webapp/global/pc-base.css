@@ -102,8 +102,24 @@ button.form-editor.add {
     background-color: #68b928;
 }
 
+button.form-editor.add:hover {
+    background-color: #64ad2b;
+}
+
+button.form-editor.add:active {
+    background-color: #5f9e2e;
+}
+
 button.form-editor.add2 {
     background-color: #508f1e;
+}
+
+button.form-editor.add2:hover {
+    background-color: #4a801f;
+}
+
+button.form-editor.add2:active {
+    background-color: #457220;
 }
 
 /*抽屉窗口*/
@@ -118,4 +134,81 @@ button.form-editor.add2 {
 }
 .pop-window-container.pop{
     display: block;
+}
+
+/*自定义表格*/
+.custom-table{
+    width: 100%;
+}
+.custom-table>table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.custom-table>table>thead>tr>th,.custom-table>table>tbody>tr>td{
+    border: 1px solid #efefef;
+}
+.custom-table>table>thead>tr{
+    background-image: linear-gradient(to bottom,#F9F9F9 0,#efefef 100%);
+}
+.custom-table>table>thead>tr>th{
+    padding: 5px 0;
+    font-size: 14px;
+}
+.custom-table>table>thead>tr>th:hover{
+    background-color: #eaf2ff;
+}
+.custom-table>table>tbody>tr>td{
+    height: 30px;
+    line-height: 30px;
+    padding: 0 10px;
+}
+.custom-table>table>tbody>tr:nth-of-type(odd){
+    background: #ffffff;
+}
+.custom-table>table>tbody>tr:nth-of-type(even){
+    background: #fafafa;
+}
+.custom-table>.table-bottom{
+    height: 30px;
+    line-height: 30px;
+    color: #99999a;
+    margin-top: 8px;
+    user-select: none;
+}
+.custom-table>.table-bottom .page-rows{
+    margin-right: 10px;
+}
+.custom-table>.table-bottom .page-rows select{
+    border: 1px solid #e3e3e3;
+    outline: none;
+}
+.custom-table>.table-bottom .pager{
+    float: right;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px solid #e3e3e3;
+}
+.custom-table>.table-bottom .pager>li{
+    float: left;
+    color: #718697;
+    cursor: pointer;
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    border-color: #e3e3e3;
+    padding: 0 8px;
+    min-width: 36px;
+    text-align: center;
+}
+.custom-table>.table-bottom .pager>li:hover{
+    background-color: #f6f6f6;
+}
+.custom-table>.table-bottom .pager>li:active{
+    background-color: #f2f2f2;
+}
+.custom-table>.table-bottom .pager>li.active{
+    background-color: #418bca;
+    color: #ffffff;
+}
+.custom-table>.table-bottom .pager>li.last{
+    border-right-width: 0;
 }

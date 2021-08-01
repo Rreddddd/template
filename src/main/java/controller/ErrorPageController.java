@@ -10,6 +10,11 @@ public class ErrorPageController {
 
     @RequestMapping("/403")
     public ModelAndView error403() {
-        return new ModelAndView("/pc/jsp/403");
+        return new ModelAndView("/jsp/403");
+    }
+
+    @RequestMapping("/404")
+    public ModelAndView error404() {
+        return new ModelAndView("/jsp/404");
     }
 }
