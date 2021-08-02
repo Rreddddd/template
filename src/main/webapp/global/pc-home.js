@@ -56,6 +56,11 @@
                 menu: container.find(">.context>.menu"),
                 handrail: container.find(".handrail")
             };
+            self.jqElements.header.find(".setting>button").on("click",function(){
+                $.modal({
+                    title : "用户信息更改"
+                });
+            });
             let handrailTimeout;
             self.jqElements.handrail.find(">i").on({
                 "click": function () {

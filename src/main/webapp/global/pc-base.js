@@ -71,20 +71,27 @@
     };
 
     $.fn.extend({
-        popWindow: function () {
-            let params = Arrays.clone(arguments);
+        installPlug: function (plug, dataName, _arguments) {
+            let params = Arrays.clone(_arguments);
             let firstParam = params.shift();
-            let instance = this.data("pop-window-instance");
+            let instance = this.data(dataName);
             if (typeof firstParam === "string") {
                 if (instance) {
                     let method = instance[firstParam];
                     if ($.isFunction(method)) {
-                        return method.apply(instance, params);
+                        let result = method.apply(instance, params);
+                        if (result !== undefined) {
+                            return result;
+                        }
                     }
                 }
             } else if (!instance) {
-                return new PopWindow(this, firstParam);
+                new plug(this, firstParam);
             }
+            return this;
+        },
+        popWindow: function () {
+            this.installPlug(PopWindow, "pop-window-instance", arguments);
         }
     });
 

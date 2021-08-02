@@ -122,6 +122,30 @@ button.form-editor.add2:active {
     background-color: #457220;
 }
 
+button.form-editor.info {
+    background-color: #4a8cf6;
+}
+
+button.form-editor.info:hover {
+    background-color: #4d8aec;
+}
+
+button.form-editor.info:active {
+    background-color: #5188e0;
+}
+
+button.form-editor.default {
+    background-color: #f0f0f0;
+}
+
+button.form-editor.default:hover {
+    background-color: #e3dcdc;
+}
+
+button.form-editor.default:active {
+    background-color: #dbd0d0;
+}
+
 /*抽屉窗口*/
 .pop-window-container{
     position: fixed;

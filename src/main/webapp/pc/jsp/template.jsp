@@ -12,11 +12,13 @@
     <head>
         <title><t:TemplatePlaceholder id="title"/></title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/iconfont/iconfont.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/modal.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-base.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-home.css"/>
         <script src="${pageContext.request.contextPath}/global/jquery-1.11.3.js"></script>
         <script src="${pageContext.request.contextPath}/global/jquery.nicescroll.min.js"></script>
         <script src="${pageContext.request.contextPath}/global/pc-base.js"></script>
+        <script src="${pageContext.request.contextPath}/pc/js/modal.js"></script>
         <script src="${pageContext.request.contextPath}/global/pc-home.js"></script>
         <t:TemplatePlaceholder id="head"/>
     </head>
