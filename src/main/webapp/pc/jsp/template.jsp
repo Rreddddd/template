@@ -26,12 +26,14 @@
     <div class="container" id="container">
         <div class="header">
             <div class="information">
-                <div class="head-img"></div>
+                <div class="head-img">
+                    <span>更改头像</span>
+                </div>
                 <div class="feature">
                     <div class="text">
-                        <div class="name"><%=user.getName()%>
+                        <div class="name"><%=user == null ? "" : user.getName()%>
                         </div>
-                        <div class="dept"><%=user.getPosition() == null ? "- -" : user.getPosition().getName()%>
+                        <div class="dept"><%=user == null ? "" : (user.getPosition() == null ? "- -" : user.getPosition().getName())%>
                         </div>
                     </div>
                     <div class="setting">
@@ -77,7 +79,7 @@
                     </div>
                     <div class="toolbar-item self-info right">
                         <div class="head-img"></div>
-                        <span class="name"><%=user.getName()%></span>
+                        <span class="name"><%=user == null ? "" : user.getName()%></span>
                     </div>
                 </div>
                 <div class="route">

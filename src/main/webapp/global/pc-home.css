@@ -35,7 +35,23 @@
     flex: 0 0 126px;
     height: 126px;
     border-radius: 100%;
-    background-color: red;
+    background: url("/global/default-head.png") #e2e2e2;
+    background-size: 100% 100%;
+    cursor: pointer;
+    text-align: center;
+}
+.container>.header>.information>.head-img>span{
+    display: none;
+    height: 26px;
+    line-height: 26px;
+    width: 100%;
+    margin-top: 49px;
+    color: #0b3f8c;
+    background-color: #70c2f3;
+    border-radius: 4px;
+}
+.container>.header>.information>.head-img:hover>span{
+    display: inline-block;
 }
 .container>.header>.information>.feature{
     flex: 1 1 100%;
@@ -300,7 +316,8 @@
     height: 28px;
     width: 28px;
     display: inline-block;
-    background-color: red;
+    background: url("/global/default-head.png") #e2e2e2;
+    background-size: 100% 100%;
     border-radius: 100%;
 }
 .container>.context>.activity>.toolbar>.toolbar-item.self-info>.name{
