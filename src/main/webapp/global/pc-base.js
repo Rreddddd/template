@@ -71,7 +71,7 @@
     };
 
     $.fn.extend({
-        installPlug: function (plug, dataName, _arguments) {
+        installPlug: function (plug, dataName, _arguments, laterInitMethodName) {
             let params = Arrays.clone(_arguments);
             let firstParam = params.shift();
             let instance = this.data(dataName);
@@ -87,6 +87,14 @@
                 }
             } else if (!instance) {
                 new plug(this, firstParam);
+            } else if (laterInitMethodName) {
+                let method = instance[laterInitMethodName];
+                if ($.isFunction(method)) {
+                    let result = method.apply(instance, params);
+                    if (result !== undefined) {
+                        return result;
+                    }
+                }
             }
             return this;
         },

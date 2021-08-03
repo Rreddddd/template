@@ -31,6 +31,7 @@
             } else {
                 self.jqElements.bottom.hide();
             }
+            self.setTitle(self.option.title);
         } else {
             if (self.option.destroy === undefined) {
                 self.option.destroy = false;
@@ -41,14 +42,15 @@
             self.jqElements.bottom = self.jqElements.container.find(">.modal-bottom");
         }
         self.jqElements.container.data("modal-instance", self);
-        let width = self.option.width;
-        if (typeof width === "number") {
-            width += "px";
+        if (self.option.width) {
+            let width = self.option.width;
+            if (typeof width === "number") {
+                width += "px";
+            }
+            self.jqElements.container.css({
+                width: width
+            });
         }
-        self.jqElements.container.css({
-            width: width
-        });
-        self.setTitle(self.option.title);
         self.jqElements.container.find(".modal-close").on("click", function () {
             self.close();
         });
@@ -78,6 +80,9 @@
         },
         open: function () {
             let self = this;
+            if (self.option.onOpen.apply(self) === false) {
+                return;
+            }
             self.visible = true;
             self.jqElements.mask.css("z-index", zIndex++).addClass("open");
             self.jqElements.container.css("z-index", zIndex++).addClass("open");
@@ -105,18 +110,21 @@
             let windowHeight = self.jqElements.$window.height();
             let windowWidth = self.jqElements.$window.width();
 
-            let topPercent = Math.round(((windowHeight / 2 - containerHeight / 2) / windowHeight) * 100);
-            let leftPercent = Math.round(((windowWidth / 2 - containerWidth / 2) / windowWidth) * 100);
+            let top = windowHeight / 2 - containerHeight / 2;
+            let left = windowWidth / 2 - containerWidth / 2;
             self.jqElements.container.css({
-                left: leftPercent + "%",
-                top: topPercent + "%"
+                left: left + "px",
+                top: top + "px"
             });
         },
         defaultOption: {
             title: "",
             iconClass: "",
-            width: 600,
+            width: 0,
             btn: [],
+            onOpen: function () {
+
+            },
             onOpened: function () {
 
             },
@@ -137,7 +145,7 @@
             if (option.btn === undefined) {
                 option.btn = [$.modal.btn.confirm];
             }
-            this.installPlug(Modal, "modal-instance", arguments);
+            this.installPlug(Modal, "modal-instance", arguments, "open");
         }
     });
 

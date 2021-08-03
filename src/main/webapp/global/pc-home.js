@@ -56,9 +56,62 @@
                 menu: container.find(">.context>.menu"),
                 handrail: container.find(".handrail")
             };
-            self.jqElements.header.find(".setting>button").on("click",function(){
+            // 头像处理 start
+            let userHeadImgModal = $("#user-head-img");
+            let uploadProgress = userHeadImgModal.find(".upload-progress");
+            let userImgEle = userHeadImgModal.find(".img>img").on("load", function () {
+                uploadProgress.removeClass("show");
+            });
+            let imgFileSelector = userHeadImgModal.find(".selector").on("change", function () {
+                let reader = new FileReader();
+                reader.readAsDataURL(this.files[0]);
+                reader.onload = function () {
+                    userImgEle.attr("src", this.result);
+                };
+            });
+            userHeadImgModal.find(".user-head-img-container .btn").on("click", function () {
+                imgFileSelector.click();
+            });
+            self.jqElements.header.find(".head-img>div>div").on("click", function () {
+                userHeadImgModal.modal({
+                    width: 220,
+                    onConfirm: function () {
+                        let files = imgFileSelector[0].files;
+                        if (files.length > 0) {
+                            let formData = new FormData();
+                            formData.set("files", files);
+                            $.ajax({
+                                type: "post",
+                                url: "/upload",
+                                data: formData,
+                                dataType: "json",
+                                processData: false,
+                                contentType: false,
+                                success: function (msg) {
+                                    if (msg.errorCode === 0) {
+                                        userHeadImgModal.modal("close");
+                                    } else {
+                                        $.alert("上传失败");
+                                    }
+                                },
+                                error: function () {
+                                    $.alert("上传失败");
+                                }
+                            });
+                        } else {
+                            $.alert("请上传图片");
+                        }
+                    },
+                    onOpen: function () {
+                        imgFileSelector.val("");
+                        userImgEle.attr("src", "/global/default-head.png")
+                    }
+                });
+            });
+            // 头像处理 end
+            self.jqElements.header.find(".setting>button").on("click", function () {
                 $.modal({
-                    title : "用户信息更改"
+                    title: "用户信息更改"
                 });
             });
             let handrailTimeout;

@@ -27,7 +27,9 @@
         <div class="header">
             <div class="information">
                 <div class="head-img">
-                    <span>更改头像</span>
+                    <div>
+                        <div>更改头像</div>
+                    </div>
                 </div>
                 <div class="feature">
                     <div class="text">
@@ -110,6 +112,32 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="modal-container" id="user-head-img">
+        <div class="modal-header">
+            <span class="modal-icon "></span>
+            <span class="modal-title">上传头像</span>
+            <div class="modal-close">x</div>
+        </div>
+        <div class="modal-body">
+            <div class="user-head-img-container">
+                <div class="img">
+                    <img src="${pageContext.request.contextPath}/global/default-head.png" alt="暂无">
+                    <div class="upload-progress">
+                        <div class="upload-progress-wrapper">
+                            <div class="upload-progress-bar"></div>
+                            <div class="upload-progress-bg">10%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <a href="javascript:void(0)" class="btn">点击选择图片</a>
+                <input class="selector" style="display: none;" type="file" accept="image/jpeg,image/jpg,image/png"/>
+            </div>
+        </div>
+        <div class="modal-bottom">
+            <button data-type="1" data-confirm class="form-editor add btn">确定</button>
         </div>
     </div>
     </body>

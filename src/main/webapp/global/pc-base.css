@@ -71,6 +71,10 @@ input[type='checkbox'] {
 
 /*基础元素*/
 
+a{
+    text-decoration: none;
+}
+
 ul {
     list-style: none;
     padding: 0;
