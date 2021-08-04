@@ -1,11 +1,22 @@
 <%@ page import="util.Context" %>
 <%@ page import="entity.User" %>
 <%@ page import="util.Menus" %>
+<%@ page import="util.WebPathUtil" %>
+<%@ page import="util.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://www.0512.red/tags" %>
 <%
     User user = Context.getUser();
+    if (user == null) {
+        user = new User();
+    }
+    String headImg = user.getHeadImg();
+    if (StringUtils.isBlank(headImg)) {
+        headImg = "/global/default-head.png";
+    } else {
+        headImg = WebPathUtil.convertToUri(user.getHeadImg());
+    }
 %>
 <t:template id="pc-home">
     <html>
@@ -27,15 +38,16 @@
         <div class="header">
             <div class="information">
                 <div class="head-img">
+                    <img src="<%=headImg%>" alt="暂无图片" id="user-head-img-max"/>
                     <div>
                         <div>更改头像</div>
                     </div>
                 </div>
                 <div class="feature">
                     <div class="text">
-                        <div class="name"><%=user == null ? "" : user.getName()%>
+                        <div class="name"><%=user.getName()%>
                         </div>
-                        <div class="dept"><%=user == null ? "" : (user.getPosition() == null ? "- -" : user.getPosition().getName())%>
+                        <div class="dept"><%=(user.getPosition() == null ? "- -" : user.getPosition().getName())%>
                         </div>
                     </div>
                     <div class="setting">
@@ -80,8 +92,10 @@
                         <i class="menu-icon"></i>
                     </div>
                     <div class="toolbar-item self-info right">
-                        <div class="head-img"></div>
-                        <span class="name"><%=user == null ? "" : user.getName()%></span>
+                        <div class="head-img">
+                            <img src="<%=headImg%>" alt="暂无图片" id="user-head-img-min"/>
+                        </div>
+                        <span class="name"><%=user.getName()%></span>
                     </div>
                 </div>
                 <div class="route">
@@ -133,6 +147,7 @@
                 </div>
                 <div class="line"></div>
                 <a href="javascript:void(0)" class="btn">点击选择图片</a>
+                <input class="img-uri" type="hidden"/>
                 <input class="selector" style="display: none;" type="file" accept="image/jpeg,image/jpg,image/png"/>
             </div>
         </div>

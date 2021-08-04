@@ -10,5 +10,7 @@ public interface UserService {
 
     User findByAccount(String account);
 
+    User findById(int id);
+
     int verifyAccountAndPassword(String account, String password);
 }

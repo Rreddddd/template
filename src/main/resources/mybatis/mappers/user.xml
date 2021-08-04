@@ -9,6 +9,7 @@
         <result column="uName" property="name"/>
         <result column="phone" property="phone"/>
         <result column="email" property="email"/>
+        <result column="head_img" property="headImg"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="freeze" property="freeze"/>
         <association property="position" javaType="Position">
@@ -25,6 +26,7 @@
             u.name as uName,
             u.phone,
             u.email,
+            u.head_img,
             u.create_time,
             u.freeze,
             u.position_id,
@@ -40,13 +42,14 @@
         <if test="password!=null">
             u.password=#{password},
         </if>
-        u.name=#{name},
-        u.phone=#{phone},
-        <if test="email!=null">
-            u.email=#{email},
+        <if test="name!=null">
+            u.name=#{name},
         </if>
+        u.phone=#{phone},
+        u.email=#{email},
+        u.head_img=#{headImg},
         u.freeze=#{freeze},
-        u.position_id=#{positionId},
+        u.position_id=#{positionId}
     </sql>
 
     <select id="findByAccount" parameterType="String" resultMap="user">
@@ -64,13 +67,22 @@
         left join position as p on u.position_id = p.id
     </select>
 
+    <select id="findById" resultMap="user">
+        select
+        <include refid="fields"/>
+        from user as u
+        left join position as p on u.position_id = p.id
+        where u.id = #{id}
+    </select>
+
     <insert id="add" parameterType="User">
         insert into user
-        values (null, #{account}, #{password}, #{name}, #{phone}, #{email}, #{createTime}, #{freeze}, #{positionId});
+        values (null, #{account}, #{password}, #{name}, #{phone}, #{email}, #{headImg}, #{createTime}, #{freeze},
+                #{positionId});
     </insert>
 
     <update id="update" parameterType="User">
-        update user u
+        update user u set
         <include refid="sets"/>
         where u.id = #{id}
     </update>

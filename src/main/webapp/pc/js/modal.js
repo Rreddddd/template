@@ -59,8 +59,18 @@
             if ($this.data("confirm") === undefined) {
                 self.option.onClickBtn.apply(self, [$(this).data("type")]);
             } else {
-                if (self.option.onConfirm.apply(self) === true) {
-                    self.close();
+                if (!self.confirmState) {
+                    return;
+                }
+                let result = self.option.onConfirm.apply(self);
+                if (self.option.repeatConfirm) {
+                    if (result === true) {
+                        self.close();
+                    }
+                } else {
+                    if (result !== undefined && result !== null) {
+                        self.confirmState = true;
+                    }
                 }
             }
         });
@@ -70,6 +80,7 @@
                 self.resize();
             }
         });
+        self.confirmState = true;
         self.open();
     };
 
@@ -117,11 +128,15 @@
                 top: top + "px"
             });
         },
+        clearConfirmState: function () {
+            this.confirmState = true;
+        },
         defaultOption: {
             title: "",
             iconClass: "",
             width: 0,
             btn: [],
+            repeatConfirm: true,
             onOpen: function () {
 
             },

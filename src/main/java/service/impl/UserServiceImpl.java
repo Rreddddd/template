@@ -43,6 +43,11 @@ public class UserServiceImpl implements UserService {
         return userDao.findByAccount(account.trim());
     }
 
+    @Override
+    public User findById(int id) {
+        return userDao.findById(id);
+    }
+
     /**
      * @param account  用户名
      * @param password 密码

@@ -67,42 +67,73 @@
                 reader.readAsDataURL(this.files[0]);
                 reader.onload = function () {
                     userImgEle.attr("src", this.result);
+                    let files = imgFileSelector[0].files;
+                    if (files.length > 0) {
+                        let formData = new FormData();
+                        formData.set("files", files[0]);
+                        $.ajax({
+                            type: "post",
+                            url: "/upload",
+                            data: formData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: false,
+                            success: function (msg) {
+                                let uris = msg.data.uris;
+                                if (uris && uris.length > 0) {
+                                    imgUriInput.val(uris[0]);
+                                }
+                            },
+                            error: function () {
+                                $.alert("上传失败");
+                            }
+                        });
+                    } else {
+                        $.alert("请上传图片");
+                    }
                 };
             });
+            let imgUriInput = userHeadImgModal.find(".img-uri");
             userHeadImgModal.find(".user-head-img-container .btn").on("click", function () {
                 imgFileSelector.click();
             });
+            let userHeadImgMax = $("#user-head-img-max");
+            let userHeadImgMin = $("#user-head-img-min");
             self.jqElements.header.find(".head-img>div>div").on("click", function () {
                 userHeadImgModal.modal({
                     width: 220,
+                    repeatConfirm: false,
                     onConfirm: function () {
-                        let files = imgFileSelector[0].files;
-                        if (files.length > 0) {
-                            let formData = new FormData();
-                            formData.set("files", files);
-                            $.ajax({
-                                type: "post",
-                                url: "/upload",
-                                data: formData,
-                                dataType: "json",
-                                processData: false,
-                                contentType: false,
-                                success: function (msg) {
-                                    if (msg.errorCode === 0) {
-                                        userHeadImgModal.modal("close");
-                                    } else {
-                                        $.alert("上传失败");
-                                    }
-                                },
-                                error: function () {
-                                    $.alert("上传失败");
-                                }
-                            });
-                        } else {
-                            $.alert("请上传图片");
+                        let imgUriValue = imgUriInput.val();
+                        if (!imgUriValue) {
+                            $.alert("请选择上传图片");
+                            return false;
                         }
+                        $.ajax({
+                            type: "post",
+                            url: "/home/updateHeadImg",
+                            data: {
+                                uri: imgUriValue
+                            },
+                            dataType: "json",
+                            success: function (msg) {
+                                if (msg.errorCode === 0) {
+                                    userHeadImgMax.attr("src", imgUriValue);
+                                    userHeadImgMin.attr("src", imgUriValue);
+                                    userHeadImgModal.modal("close");
+                                } else {
+                                    $.alert(msg.msg || "保存失败");
+                                }
+                                userHeadImgModal.modal("clearConfirmState");
+                            },
+                            error: function () {
+                                $.alert("保存失败");
+                                userHeadImgModal.modal("clearConfirmState");
+                            }
+                        });
                     },
                     onOpen: function () {
+                        imgUriInput.val("");
                         imgFileSelector.val("");
                         userImgEle.attr("src", "/global/default-head.png")
                     }

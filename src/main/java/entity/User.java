@@ -10,6 +10,7 @@ public class User {
     private String name;
     private String phone;
     private String email;
+    private String headImg;
     private Date createTime;
     private boolean freeze;
     private Position position;
@@ -62,6 +63,14 @@ public class User {
         this.email = email;
     }
 
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -82,6 +91,10 @@ public class User {
         return position;
     }
 
+    public Integer getPositionId() {
+        return position == null ? null : position.getId();
+    }
+
     public void setPosition(Position position) {
         this.position = position;
     }
@@ -94,6 +107,7 @@ public class User {
         newUser.setName(name);
         newUser.setPhone(phone);
         newUser.setEmail(email);
+        newUser.setHeadImg(headImg);
         newUser.setCreateTime(createTime);
         newUser.setFreeze(freeze);
         if (position != null) {

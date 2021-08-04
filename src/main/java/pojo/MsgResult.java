@@ -5,6 +5,9 @@ import java.util.Map;
 
 public class MsgResult {
 
+    public static final int SUCCESS_CODE = 0;
+    public static final int FAILURE_CODE = 1;
+
     // 0成功 1错误
     private int errorCode;
     private String msg;
@@ -26,11 +29,19 @@ public class MsgResult {
     }
 
     public static MsgResult success() {
-        return new MsgResult(0, null);
+        return success(null);
+    }
+
+    public static MsgResult success(String msg) {
+        return new MsgResult(SUCCESS_CODE, msg);
     }
 
     public static MsgResult failure() {
-        return new MsgResult(1, null);
+        return failure(null);
+    }
+
+    public static MsgResult failure(String msg) {
+        return new MsgResult(FAILURE_CODE, msg);
     }
 
     public int getErrorCode() {

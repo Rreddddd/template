@@ -57,6 +57,7 @@ public abstract class Users {
                     }
                     cacheUser.setPhone(user.getPhone());
                     cacheUser.setEmail(user.getEmail());
+                    cacheUser.setHeadImg(user.getHeadImg());
                     cacheUser.setFreeze(user.isFreeze());
                     cacheUser.setPosition(user.getPosition());
                 }

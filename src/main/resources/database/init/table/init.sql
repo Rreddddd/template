@@ -2,15 +2,16 @@
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`
 (
-    `id`          int(11)     NOT NULL AUTO_INCREMENT,
-    `account`     varchar(50) NOT NULL COMMENT '登录用户名',
-    `password`    varchar(50) NOT NULL COMMENT '登录密码',
-    `name`        varchar(20) NOT NULL COMMENT '姓名',
-    `phone`       int(11)     NULL COMMENT '移动电话号码',
-    `email`       varchar(50) NULL COMMENT '邮箱',
-    `create_time` datetime    NOT NULL COMMENT '创建时间',
-    `freeze`      bit         NOT NULL DEFAULT b'0' COMMENT '是否冻结',
-    `position_id` int         NULL COMMENT '职位/身份',
+    `id`          int(11)      NOT NULL AUTO_INCREMENT,
+    `account`     varchar(50)  NOT NULL COMMENT '登录用户名',
+    `password`    varchar(50)  NOT NULL COMMENT '登录密码',
+    `name`        varchar(20)  NOT NULL COMMENT '姓名',
+    `phone`       int(11)      NULL COMMENT '移动电话号码',
+    `email`       varchar(50)  NULL COMMENT '邮箱',
+    `head_img`    varchar(100) NULL COMMENT '头像相对路径',
+    `create_time` datetime     NOT NULL COMMENT '创建时间',
+    `freeze`      bit          NOT NULL DEFAULT b'0' COMMENT '是否冻结',
+    `position_id` int          NULL COMMENT '职位/身份',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `index1` (`account`) USING HASH
 );
@@ -72,7 +73,7 @@ CREATE TABLE `position`
 );
 
 insert into user
-values (null, 'admin', '{red}{MD5}202cb962ac59075b964b07152d234b70', 'Administrator', null, null, now(), 0, 1);
+values (null, 'admin', '{red}{MD5}202cb962ac59075b964b07152d234b70', 'Administrator', null, null, null, now(), 0, 1);
 
 insert into position
 values (null, '超级管理员', 0);

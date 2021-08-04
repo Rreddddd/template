@@ -35,18 +35,26 @@
     flex: 0 0 126px;
     height: 126px;
     border-radius: 100%;
-    background: url("/global/default-head.png") #e2e2e2;
     background-size: 100% 100%;
     cursor: pointer;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #e2e2e2;
+}
+.container>.header>.information>.head-img>img{
+    height: 100%;
+    width: 100%;
 }
 .container>.header>.information>.head-img>div{
+    position: absolute;
+    top: 48px;
     visibility: hidden;
     height: 30px;
     line-height: 30px;
     width: 100%;
-    margin-top: 48px;
     border-radius: 5px;
+    z-index: 1;
 }
 .container>.header>.information>.head-img>div>div{
     display: none;
@@ -324,9 +332,14 @@
     height: 28px;
     width: 28px;
     display: inline-block;
-    background: url("/global/default-head.png") #e2e2e2;
+    background: #e2e2e2;
     background-size: 100% 100%;
     border-radius: 100%;
+    overflow: hidden;
+}
+.container>.context>.activity>.toolbar>.toolbar-item.self-info>.head-img>img{
+    height: 100%;
+    width: 100%;
 }
 .container>.context>.activity>.toolbar>.toolbar-item.self-info>.name{
     margin: 0 25px 0 10px;
