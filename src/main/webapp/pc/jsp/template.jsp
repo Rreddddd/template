@@ -17,6 +17,8 @@
     } else {
         headImg = WebPathUtil.convertToUri(user.getHeadImg());
     }
+    user.setHeadImg(null);
+    user.setPassword(null);
 %>
 <t:template id="pc-home">
     <html>
@@ -31,6 +33,12 @@
         <script src="${pageContext.request.contextPath}/global/pc-base.js"></script>
         <script src="${pageContext.request.contextPath}/pc/js/modal.js"></script>
         <script src="${pageContext.request.contextPath}/global/pc-home.js"></script>
+        <script>
+            !function () {
+                let userJson = '<%=user.toJson()%>';
+                window.home.user = userJson ? JSON.parse(userJson) : undefined;
+            }();
+        </script>
         <t:TemplatePlaceholder id="head"/>
     </head>
     <body>
@@ -45,7 +53,7 @@
                 </div>
                 <div class="feature">
                     <div class="text">
-                        <div class="name"><%=user.getName()%>
+                        <div class="name" id="user-name-max"><%=user.getName()%>
                         </div>
                         <div class="dept"><%=(user.getPosition() == null ? "- -" : user.getPosition().getName())%>
                         </div>
@@ -95,7 +103,7 @@
                         <div class="head-img">
                             <img src="<%=headImg%>" alt="暂无图片" id="user-head-img-min"/>
                         </div>
-                        <span class="name"><%=user.getName()%></span>
+                        <span class="name" id="user-name-min"><%=user.getName()%></span>
                     </div>
                 </div>
                 <div class="route">
@@ -149,6 +157,88 @@
                 <a href="javascript:void(0)" class="btn">点击选择图片</a>
                 <input class="img-uri" type="hidden"/>
                 <input class="selector" style="display: none;" type="file" accept="image/jpeg,image/jpg,image/png"/>
+            </div>
+        </div>
+        <div class="modal-bottom">
+            <button data-type="1" data-confirm class="form-editor add btn">确定</button>
+        </div>
+    </div>
+    <div class="modal-container" id="user-info-modal">
+        <div class="modal-header">
+            <span class="modal-icon "></span>
+            <span class="modal-title">个人信息更改</span>
+            <div class="modal-close">x</div>
+        </div>
+        <div class="modal-body">
+            <div class="user-info-container">
+                <div class="form-row">
+                    <div class="edit-wrapper">
+                        <span class="edit-title">账<span class="word-hold"></span><span
+                                class="word-hold"></span>户 :</span>
+                        <span class="edit-value account">admin</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="edit-wrapper">
+                        <span class="edit-title">名<span class="word-hold"></span><span
+                                class="word-hold"></span>称 :</span>
+                        <div class="edit-value">
+                            <input class="edit-control" maxlength="20" type="text" name="name" placeholder="输入用户名称(必填)">
+                        </div>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label class="edit-wrapper">
+                        <span class="edit-title">电<span class="word-hold"></span><span
+                                class="word-hold"></span>话 :</span>
+                        <div class="edit-value">
+                            <input class="edit-control" type="text" name="phone" placeholder="输入移动电话">
+                            <div class="edit-hint"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label class="edit-wrapper">
+                        <span class="edit-title">邮<span class="word-hold"></span><span
+                                class="word-hold"></span>箱 :</span>
+                        <div class="edit-value">
+                            <input class="edit-control" maxlength="100" type="text" name="email" placeholder="输入电子邮箱">
+                            <div class="edit-hint"></div>
+                        </div>
+                    </label>
+                </div>
+                <div class="change-pwd-line">修改密码</div>
+                <div class="pwd-area">
+                    <div class="form-row">
+                        <label class="edit-wrapper">
+                            <span class="edit-title">旧<span class="word-hold half"></span>密<span
+                                    class="word-hold half"></span>码 :</span>
+                            <div class="edit-value">
+                                <input class="edit-control" type="password" name="old-pwd" placeholder="输入旧密码">
+                                <div class="edit-hint"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label class="edit-wrapper">
+                            <span class="edit-title">新<span class="word-hold half"></span>密<span
+                                    class="word-hold half"></span>码 :</span>
+                            <div class="edit-value">
+                                <input class="edit-control" type="password" maxlength="16" name="new-pwd" placeholder="输入新密码(不少于6位)">
+                                <div class="edit-hint"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label class="edit-wrapper">
+                            <span class="edit-title">确认密码 :</span>
+                            <div class="edit-value">
+                                <input class="edit-control" type="password" name="confirm-pwd" placeholder="重新输入新密码">
+                                <div class="edit-hint"></div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-bottom">

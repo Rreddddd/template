@@ -522,3 +522,42 @@
 .user-head-img-container>.btn{
     margin-left: 20px;
 }
+/*用户信息弹框*/
+.user-info-container{
+    width: 400px;
+    padding: 0 30px;
+}
+.user-info-container .change-pwd-line{
+    text-align: center;
+    padding-top: 8px;
+    position: relative;
+    cursor: pointer;
+    color: blue;
+}
+.user-info-container .change-pwd-line::before{
+    content: "";
+    position: absolute;
+    top: 70%;
+    left: 0;
+    height: 1px;
+    width: 42%;
+    background-color: #a9a1a1;
+}
+.user-info-container .change-pwd-line::after{
+    content: "";
+    position: absolute;
+    top: 70%;
+    right: 0;
+    height: 1px;
+    width: 42%;
+    background-color: #a9a1a1;
+}
+.user-info-container .change-pwd-line.down::before,.user-info-container .change-pwd-line.down::after{
+    background-color: #6794e0;
+}
+.user-info-container .pwd-area{
+    display: none;
+}
+.user-info-container .pwd-area.show{
+    display: block;
+}

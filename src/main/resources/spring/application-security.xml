@@ -40,16 +40,27 @@
     </security:http>
 
     <bean id="myUserDetailsService" class="security.MyUserDetailsService"/>
+    <!--    密码加密-->
     <bean id="userPasswordEncoder" class="security.UserPasswordEncoder">
         <constructor-arg index="0" value="red"/>
         <constructor-arg index="1">
             <map>
-                <entry key="red" value-ref="redPasswordEncoder"/>
+                <entry key="red" value-ref="myDelegatingPasswordEncoder"/>
             </map>
         </constructor-arg>
     </bean>
-    <bean id="redPasswordEncoder" class="org.springframework.security.crypto.factory.PasswordEncoderFactories"
-          factory-method="createDelegatingPasswordEncoder"/>
+    <bean id="myDelegatingPasswordEncoder"
+          class="org.springframework.security.crypto.password.DelegatingPasswordEncoder">
+        <constructor-arg index="0" value="MD5"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="MD5" value-ref="md5PasswordEncoder"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    <bean id="md5PasswordEncoder" class="org.springframework.security.crypto.password.MessageDigestPasswordEncoder">
+        <constructor-arg index="0" value="MD5"/>
+    </bean>
     <bean id="myAuthenticationEntryPoint" class="security.MyAuthenticationEntryPoint"/>
     <bean id="myAuthenticationProvider" class="security.provider.MyAuthenticationProvider"/>
     <!--    登录处理器-->

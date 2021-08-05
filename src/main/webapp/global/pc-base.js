@@ -100,6 +100,32 @@
         },
         popWindow: function () {
             this.installPlug(PopWindow, "pop-window-instance", arguments);
+        },
+        showEditHint: function (text, redBorder, focus) {
+            let hint = this.next();
+            if (hint.length > 0 && hint.hasClass("edit-hint") && text) {
+                hint.text(text).addClass("show");
+            }
+            if (redBorder) {
+                let $this=this;
+                $this.off("focus.hint").on("focus.hint", function () {
+                    $this.hideEditHint(true);
+                }).data("warnState", true).addClass("warn");
+            }
+            if (focus) {
+                this[0].focus();
+            }
+            return this;
+        },
+        hideEditHint: function (redBorder) {
+            let hint = this.next();
+            if (hint.length > 0 && hint.hasClass("edit-hint")) {
+                hint.removeClass("show");
+            }
+            if (redBorder) {
+                this.data("warnState", false).removeClass("warn");
+            }
+            return this;
         }
     });
 

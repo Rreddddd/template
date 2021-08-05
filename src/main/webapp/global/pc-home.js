@@ -140,11 +140,136 @@
                 });
             });
             // 头像处理 end
+            // 用户信息处理 start
+            let userNameMaxSpan = $("#user-name-max");
+            let userNameMinSpan = $("#user-name-min");
+            let userInfoModal = $("#user-info-modal");
+            userInfoModal.find(".account").text(home.user.account);
+            let nameInput = userInfoModal.find(".edit-control[name='name']");
+            let phoneInput = userInfoModal.find(".edit-control[name='phone']").on("input", function () {
+                let phoneValue = phoneInput.val().trim();
+                phoneValue = phoneValue.replace(/\D/g, "");
+                phoneInput.val(phoneValue);
+                if (phoneValue && !/^1[1-9][1-9]\d{8}$/.test(phoneValue)) {
+                    phoneInput.showEditHint("电话号码格式错误", true);
+                } else {
+                    phoneInput.hideEditHint(true);
+                }
+            });
+            let emailInput = userInfoModal.find(".edit-control[name='email']").on("input", function () {
+                let emailValue = emailInput.val().trim();
+                if (emailValue && !/^.+@.+\.(com|cn|org)$/.test(emailValue)) {
+                    emailInput.showEditHint("邮箱地址格式错误", true);
+                } else {
+                    emailInput.hideEditHint(true);
+                }
+            });
+            let pwdAreaDiv = userInfoModal.find(".pwd-area");
+            let oldPwdInput = userInfoModal.find(".edit-control[name='old-pwd']");
+            let newPwdInput = userInfoModal.find(".edit-control[name='new-pwd']");
+            let confirmPwdInput = userInfoModal.find(".edit-control[name='confirm-pwd']");
+            let changePwdLine = userInfoModal.find(".change-pwd-line").on("click", function () {
+                if (changePwdLine.hasClass("down")) {
+                    changePwdLine.removeClass("down");
+                    pwdAreaDiv.removeClass("show");
+                } else {
+                    changePwdLine.addClass("down");
+                    pwdAreaDiv.addClass("show");
+                }
+            });
             self.jqElements.header.find(".setting>button").on("click", function () {
-                $.modal({
-                    title: "用户信息更改"
+                userInfoModal.modal({
+                    repeatConfirm: false,
+                    onConfirm: function () {
+                        let nameValue = nameInput.val().trim();
+                        if (!nameValue) {
+                            nameInput.showEditHint(undefined, true);
+                            return false;
+                        }
+                        let phoneValue = phoneInput.val().trim();
+                        if (phoneInput.data("warnState")) {
+                            phoneInput[0].focus();
+                            return false;
+                        }
+                        let emailValue = emailInput.val().trim();
+                        if (emailInput.data("warnState")) {
+                            emailInput[0].focus();
+                            return false;
+                        }
+                        let oldPwd, newPwd;
+                        if (pwdAreaDiv.hasClass("show")) {
+                            let oldPwdValue = oldPwdInput.val();
+                            if (!oldPwdValue) {
+                                oldPwdInput.showEditHint(undefined, true, true);
+                                return false;
+                            }
+                            let newPwdValue = newPwdInput.val();
+                            if (!newPwdValue) {
+                                newPwdInput.showEditHint("密码不能为空", false, true);
+                                return false;
+                            } else {
+                                newPwdInput.hideEditHint();
+                            }
+                            if (newPwdValue.length < 6) {
+                                newPwdInput.showEditHint("密码不能少于6位", false, true);
+                                return false;
+                            } else {
+                                newPwdInput.hideEditHint();
+                            }
+                            let confirmPwdValue = confirmPwdInput.val();
+                            if (newPwdValue !== confirmPwdValue) {
+                                confirmPwdInput.showEditHint("再次输入密码不一致", false, true);
+                                return false;
+                            } else {
+                                confirmPwdInput.hideEditHint();
+                            }
+                            oldPwd = oldPwdValue;
+                            newPwd = newPwdValue;
+                        }
+                        let params = {
+                            id: home.user.id,
+                            name: nameValue,
+                            phone: phoneValue || undefined,
+                            email: emailValue,
+                            oldPwd: oldPwd,
+                            newPwd: newPwd
+                        };
+                        $.ajax({
+                            type: "post",
+                            url: "/home/updateUserInfo",
+                            data: JSON.stringify(params),
+                            dataType: "json",
+                            contentType: 'application/json;charset=utf-8',
+                            success: function (msg) {
+                                if (msg.errorCode === 0) {
+                                    $.extend(home.user, params);
+                                    userNameMaxSpan.text(params.name);
+                                    userNameMinSpan.text(params.name);
+                                    userInfoModal.modal("close");
+                                } else {
+                                    $.alert(msg.msg || "保存失败");
+                                }
+                                userInfoModal.modal("clearConfirmState");
+                            },
+                            error: function () {
+                                $.alert("保存失败");
+                                userInfoModal.modal("clearConfirmState");
+                            }
+                        });
+                    },
+                    onOpen: function () {
+                        nameInput.hideEditHint(true).val(home.user.name || "");
+                        phoneInput.hideEditHint(true).val(home.user.phone || "");
+                        emailInput.hideEditHint(true).val(home.user.email || "");
+                        changePwdLine.removeClass("down");
+                        pwdAreaDiv.removeClass("show");
+                        oldPwdInput.hideEditHint(true).val("");
+                        newPwdInput.hideEditHint(true).val("");
+                        confirmPwdInput.hideEditHint(true).val("");
+                    }
                 });
             });
+            // 用户信息处理 end
             let handrailTimeout;
             self.jqElements.handrail.find(">i").on({
                 "click": function () {

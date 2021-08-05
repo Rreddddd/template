@@ -1,5 +1,8 @@
 package entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.Date;
 
 public class User {
@@ -97,6 +100,15 @@ public class User {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public String toJson() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public User copy() {

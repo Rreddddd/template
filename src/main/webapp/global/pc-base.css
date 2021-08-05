@@ -18,7 +18,7 @@ input[type='checkbox'] {
 
 .form-row {
     width: 100%;
-    height: 31px;
+    min-height: 31px;
     line-height: 31px;
     margin-top: 10px;
 }
@@ -33,10 +33,60 @@ input[type='checkbox'] {
     flex: 0 0 auto;
 }
 
-.edit-wrapper > .edit-control {
+.edit-wrapper > .edit-title.bold {
+    font-weight: bold;
+}
+
+.edit-wrapper > .edit-value {
+    flex: 1 1 100%;
+    display: block;
+    padding-left: 10px;
+    position: relative;
+}
+
+.edit-wrapper .edit-control {
     flex: 1 1 100%;
     margin-left: 10px;
     padding-left: 10px;
+    outline: none;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cccccc;
+    border-radius: 3px;
+}
+
+.edit-wrapper .edit-control.warn {
+    border-color: red;
+}
+
+.edit-wrapper > .edit-value .edit-control {
+    padding-left: 10px;
+    width: 100%;
+    height: 31px;
+    margin-left: 0;
+}
+
+.edit-wrapper > .edit-value .edit-hint {
+    height: fit-content;
+    line-height: 14px;
+    padding-left: 5px;
+    color: red;
+    font-size: 12px;
+    padding-top: 2px;
+    display: none;
+}
+
+.edit-wrapper > .edit-value .edit-hint.show {
+    display: block;
+}
+
+.edit-wrapper .edit-control:focus {
+    border-color: #66afe9;
+    box-shadow: 0 0 4px #66afe9;
+}
+
+.edit-wrapper .edit-control::placeholder {
+    color: #b399a6;
 }
 
 .form-row > .edit-wrapper.single > .edit-control {
@@ -48,6 +98,10 @@ input[type='checkbox'] {
     width: 12px;
 }
 
+.word-hold.half {
+    width: 6px;
+}
+
 .line-input {
     border-width: 0 0 1px 0;
 }
@@ -57,7 +111,7 @@ input[type='checkbox'] {
 }
 
 .line-input.warn {
-    border-bottom-color: red;
+    border-color: transparent transparent red transparent;
 }
 
 .edit-checkbox-wrapper {
