@@ -12,27 +12,30 @@
         <result column="head_img" property="headImg"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="freeze" property="freeze"/>
-        <association property="position" javaType="Position">
+        <collection property="positions" javaType="ArrayList" ofType="Position">
             <id column="pId" property="id"/>
             <result column="pName" property="name"/>
             <result column="visible" property="visible"/>
-        </association>
+        </collection>
     </resultMap>
 
-    <sql id="fields">
-        u.id as uId,
-            u.account,
-            u.password,
-            u.name as uName,
-            u.phone,
-            u.email,
-            u.head_img,
-            u.create_time,
-            u.freeze,
-            u.position_id,
+    <sql id="position_fields">
         p.id as pId,
             p.name as pName,
             p.visible
+    </sql>
+
+    <sql id="user_position_fields">
+        u.id as uId,
+        u.account,
+        u.password,
+        u.name as uName,
+        u.phone,
+        u.email,
+        u.head_img,
+        u.create_time,
+        u.freeze,
+        <include refid="position_fields"/>
     </sql>
 
     <sql id="sets">
@@ -48,37 +51,35 @@
         u.phone=#{phone},
         u.email=#{email},
         u.head_img=#{headImg},
-        u.freeze=#{freeze},
-        u.position_id=#{positionId}
+        u.freeze=#{freeze}
     </sql>
 
     <select id="findByAccount" parameterType="String" resultMap="user">
         select
-        <include refid="fields"/>
-        from user as u
-        left join position as p on u.position_id = p.id
+        <include refid="user_position_fields"/>
+        from user u left join user_position up on u.id = up.user_id
+        left join position p on up.position_id = p.id
         where u.account = #{account}
     </select>
 
     <select id="findAll" resultMap="user">
         select
-        <include refid="fields"/>
-        from user as u
-        left join position as p on u.position_id = p.id
+        <include refid="user_position_fields"/>
+        from user u left join user_position up on u.id = up.user_id
+        left join position p on up.position_id = p.id
     </select>
 
     <select id="findById" resultMap="user">
         select
-        <include refid="fields"/>
-        from user as u
-        left join position as p on u.position_id = p.id
+        <include refid="user_position_fields"/>
+        from user u left join user_position up on u.id = up.user_id
+        left join position p on up.position_id = p.id
         where u.id = #{id}
     </select>
 
     <insert id="add" parameterType="User">
         insert into user
-        values (null, #{account}, #{password}, #{name}, #{phone}, #{email}, #{headImg}, #{createTime}, #{freeze},
-                #{positionId});
+        values (null, #{account}, #{password}, #{name}, #{phone}, #{email}, #{headImg}, #{createTime}, #{freeze});
     </insert>
 
     <update id="update" parameterType="User">

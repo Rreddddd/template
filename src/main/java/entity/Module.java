@@ -1,6 +1,8 @@
 package entity;
 
-public class Module {
+import util.SerialCloneAble;
+
+public class Module extends SerialCloneAble {
 
     private int id;
     private String title;

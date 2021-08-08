@@ -183,17 +183,17 @@
                     onConfirm: function () {
                         let nameValue = nameInput.val().trim();
                         if (!nameValue) {
-                            nameInput.showEditHint(undefined, true);
+                            nameInput.showEditHint(undefined, true, true);
                             return false;
                         }
                         let phoneValue = phoneInput.val().trim();
                         if (phoneInput.data("warnState")) {
-                            phoneInput[0].focus();
+                            phoneInput.showEditHint(undefined, true, true);
                             return false;
                         }
                         let emailValue = emailInput.val().trim();
                         if (emailInput.data("warnState")) {
-                            emailInput[0].focus();
+                            emailInput.showEditHint(undefined, true, true);
                             return false;
                         }
                         let oldPwd, newPwd;
@@ -242,7 +242,10 @@
                             contentType: 'application/json;charset=utf-8',
                             success: function (msg) {
                                 if (msg.errorCode === 0) {
-                                    $.extend(home.user, params);
+                                    $.extend(home.user, {
+                                        phone: phoneValue || "",
+                                        email: emailValue || ""
+                                    }, params);
                                     userNameMaxSpan.text(params.name);
                                     userNameMinSpan.text(params.name);
                                     userInfoModal.modal("close");
@@ -295,8 +298,14 @@
                 }
             });
 
+            //菜单处理 start
+            self.jqElements.menuToolbar = self.jqElements.menu.find(".toolbar");
             self.jqElements.appList = self.jqElements.menu.find(".application-list");
-            self.jqElements.appList.delegate(".application-item-wrapper", "click", function () {
+            let setAppListHeight = function () {
+                self.jqElements.appList.css("height", $window.height() - self.jqElements.header.outerHeight() - self.jqElements.menuToolbar.outerHeight() - 4 + "px");
+            };
+            setAppListHeight();
+            self.jqElements.appList.find(".application-item-wrapper").on("click", function (event, enter) {
                 let item = $(this);
                 if (item.hasClass("branch")) {
                     if (item.hasClass("expand")) {
@@ -312,13 +321,53 @@
                         self.activeItem.removeClass("active");
                     }
                     self.activeItem = item;
-                    item.parents(".application-item").find(">.application-item-wrapper").addClass("active");
                     item.addClass("active");
-                    window.location.href = item.data("item-url");
+                    let routes = [{icon: "", name: item.find(">.name").text()}];
+                    let parentItem = item;
+                    while ((parentItem = parentItem.parents(".application-item").eq(1)).length > 0) {
+                        routes.push({
+                            icon: parentItem.find(">.application-item-wrapper>.icon").attr("class"),
+                            name: parentItem.find(">.application-item-wrapper>.name").text()
+                        });
+                        parentItem.addClass("expansion").find(">.application-item-wrapper").addClass("expand").addClass("active");
+                    }
+                    routes.push({icon: "", name: "首页"});
+                    self.jqElements.route.empty();
+                    let routeLength = routes.length - 1;
+                    for (let i = routeLength; i >= 0; i--) {
+                        let item = $('<div class="route-item">' +
+                            '<div class="route-item-wrapper">' +
+                            '<span class="route-item-name">' + routes[i].name + '</span>' +
+                            '</div>' +
+                            '</div>');
+                        if (i === routeLength) {
+                            item.on("click", function () {
+                                window.location.href = "/";
+                            }).find(">.route-item-wrapper").addClass("home");
+                        } else {
+                            self.jqElements.route.append('<div class="route-item route-separation"></div>');
+                        }
+                        if (i === 0) {
+                            item.find(".route-item-wrapper").addClass("active");
+                        }
+                        self.jqElements.route.append(item);
+                    }
+                    if (enter !== false) {
+                        window.location.href = item.data("item-url");
+                    }
                 }
+                appListScroll.resize();
             });
-
+            let appListScroll = self.jqElements.appList.niceScroll({
+                cursorborder: "1px solid #e2e2e2",
+                cursorcolor: "#2d2e2f",
+                cursorwidth: 5
+            });
             self.jqElements.activity = self.jqElements.container.find(">.context>.activity");
+            self.jqElements.route = self.jqElements.activity.find(">.route");
+            self.activeMenu(home.activeModuleId);
+            //菜单处理 end
+
             self.jqElements.activity.find(".toolbar .menu-btn").on("click", function () {
                 self.toggleMenu();
             });
@@ -351,6 +400,11 @@
             home.on("container-resize", function () {
                 setPanelContainerHeight();
                 panelWrapper.resize();
+                setAppListHeight();
+                appListScroll.resize();
+            });
+            home.on("toggle-menu", function () {
+                appListScroll.resize();
             });
             setPanelContainerHeight();
             let panelWrapper = panelContainer.find(">.panel-wrapper").niceScroll({
@@ -370,10 +424,33 @@
         packMenu: function () {
             let self = this;
             self.jqElements.container.addClass("pack-menu");
+            setTimeout(function () {
+                home.trigger("toggle-menu");
+            }, 301);
+        },
+        activeMenu: function (moduleId, enter) {
+            let self = this;
+            let menuITem = self.jqElements.appList.find('.application-item-wrapper[data-module-id="' + moduleId + '"]');
+            if (menuITem.length > 0) {
+                menuITem.triggerHandler("click", [enter === true]);
+            } else {
+                let item = $('<div class="route-item">' +
+                    '<div class="route-item-wrapper">' +
+                    '<span class="route-item-name">首页</span>' +
+                    '</div>' +
+                    '</div>').on("click", function () {
+                    window.location.href = "/";
+                });
+                item.find(">.route-item-wrapper").addClass("home");
+                self.jqElements.route.append(item);
+            }
         },
         pullMenu: function () {
             let self = this;
             self.jqElements.container.removeClass("pack-menu");
+            setTimeout(function () {
+                home.trigger("toggle-menu");
+            }, 301);
         }
     };
 

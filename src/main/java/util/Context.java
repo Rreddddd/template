@@ -1,5 +1,6 @@
 package util;
 
+import entity.Module;
 import entity.User;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -7,6 +8,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import pojo.Constant;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -58,5 +60,13 @@ public abstract class Context {
             return null;
         }
         return Users.get(authentication.getName());
+    }
+
+    public static Module getActiveModule() {
+        HttpSession session = getSession();
+        if (session == null) {
+            return null;
+        }
+        return (Module) session.getAttribute(Constant.CONTEXT_ACTIVE_MENU);
     }
 }

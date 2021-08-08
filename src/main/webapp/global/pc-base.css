@@ -103,7 +103,7 @@ input[type='checkbox'] {
 }
 
 .line-input {
-    border-width: 0 0 1px 0;
+    border-width: 0 0 1px 0 !important;
 }
 
 .line-input:focus {
@@ -192,6 +192,30 @@ button.form-editor.info:active {
     background-color: #5188e0;
 }
 
+button.form-editor.update {
+    background-color: #ec8b23;
+}
+
+button.form-editor.update:hover {
+    background-color: #e38827;
+}
+
+button.form-editor.update:active {
+    background-color: #dc882e;
+}
+
+button.form-editor.delete {
+    background-color: #f61d22;
+}
+
+button.form-editor.delete:hover {
+    background-color: #e82227;
+}
+
+button.form-editor.delete:active {
+    background-color: #de262b;
+}
+
 button.form-editor.default {
     background-color: #f0f0f0;
 }
@@ -249,6 +273,12 @@ button.form-editor.default:active {
 }
 .custom-table>table>tbody>tr:nth-of-type(even){
     background: #fafafa;
+}
+.custom-table>.table-body{
+    font-size: 13px;
+}
+.custom-table>.table-body td>.form-editor{
+    margin: 0 10px;
 }
 .custom-table>.table-bottom{
     height: 30px;

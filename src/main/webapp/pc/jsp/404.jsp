@@ -3,6 +3,9 @@
 <head>
     <title>找不到页面</title>
     <style type="text/css">
+        *{
+            box-sizing: border-box;
+        }
         body, div, ul, li, h1, h2, h3, h4, h5, h6, p {
             margin: 0;
             padding: 0;
@@ -42,17 +45,12 @@
             position: relative;
         }
 
-        body {
-            background: #F9FAFC url(/pc/image/404-bg.jpg) no-repeat center bottom;
-        }
-
         .content .main {
-            width: 500px;
-            height: 500px;
-            position: absolute;
-            left: 50%;
-            margin-left: -250px;
-            bottom: 100px;
+            background: #F9FAFC url(/pc/image/404-bg.jpg) no-repeat center bottom;
+            background-size: 100% 100%;
+            width: 50%;
+            height: 100%;
+            margin: 0 auto;
         }
 
         .content .main h1 {
@@ -115,14 +113,23 @@
         .content .main .nav a:hover {
             color: #f85766;
         }
+
+        .content .main .wrapper {
+            position: absolute;
+            left: 50%;
+            margin-left: -220px;
+            top: 34%;
+        }
     </style>
 </head>
 <body>
 <div class="content">
     <div class="main">
-        <h1></h1>
-        <h2>您访问的网页没有找到！</h2>
-        <a href="${pageContext.request.contextPath}/" class="backIndex">回首页</a>
+        <div class="wrapper">
+            <h1></h1>
+            <h2>您访问的网页没有找到！</h2>
+            <a href="${pageContext.request.contextPath}/" class="backIndex">回首页</a>
+        </div>
     </div>
 </div>
 </body>

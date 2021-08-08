@@ -3,6 +3,10 @@
 <%@ page import="util.Menus" %>
 <%@ page import="util.WebPathUtil" %>
 <%@ page import="util.StringUtils" %>
+<%@ page import="entity.Position" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="entity.Module" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://www.0512.red/tags" %>
@@ -19,11 +23,24 @@
     }
     user.setHeadImg(null);
     user.setPassword(null);
+    String positionName;
+    List<String> positionNames = new ArrayList<>();
+    List<Position> positions = user.getPositions();
+    if (positions != null && positions.size() > 0) {
+        for (Position position : positions) {
+            positionNames.add(position.getName());
+        }
+        positionName = String.join("、", positionNames);
+    } else {
+        positionName = "- -";
+    }
+    Module activeModule = Context.getActiveModule();
 %>
 <t:template id="pc-home">
     <html>
     <head>
-        <title><t:TemplatePlaceholder id="title"/></title>
+        <title><t:TemplatePlaceholder id="title"/><%=activeModule == null ? "- -" : activeModule.getTitle()%>
+        </title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/iconfont/iconfont.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/modal.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-base.css"/>
@@ -37,6 +54,7 @@
             !function () {
                 let userJson = '<%=user.toJson()%>';
                 window.home.user = userJson ? JSON.parse(userJson) : undefined;
+                window.home.activeModuleId =<%=activeModule==null?0:activeModule.getId()%>;
             }();
         </script>
         <t:TemplatePlaceholder id="head"/>
@@ -55,7 +73,7 @@
                     <div class="text">
                         <div class="name" id="user-name-max"><%=user.getName()%>
                         </div>
-                        <div class="dept"><%=(user.getPosition() == null ? "- -" : user.getPosition().getName())%>
+                        <div class="dept"><%=positionName%>
                         </div>
                     </div>
                     <div class="setting">
@@ -106,26 +124,7 @@
                         <span class="name" id="user-name-min"><%=user.getName()%></span>
                     </div>
                 </div>
-                <div class="route">
-                    <div class="route-item">
-                        <div class="route-item-wrapper">
-                            <i class="iconfont icon-shezhi1"></i>
-                            <span class="route-item-name">首页</span>
-                        </div>
-                    </div>
-                    <div class="route-item route-separation"></div>
-                    <div class="route-item">
-                        <div class="route-item-wrapper">
-                            <span class="route-item-name">模块1</span>
-                        </div>
-                    </div>
-                    <div class="route-item route-separation"></div>
-                    <div class="route-item">
-                        <div class="route-item-wrapper active">
-                            <span class="route-item-name">模块1.1</span>
-                        </div>
-                    </div>
-                </div>
+                <div class="route"></div>
                 <div class="panel-container">
                     <div class="panel-wrapper">
                         <div class="panel-content">
@@ -224,7 +223,8 @@
                             <span class="edit-title">新<span class="word-hold half"></span>密<span
                                     class="word-hold half"></span>码 :</span>
                             <div class="edit-value">
-                                <input class="edit-control" type="password" maxlength="16" name="new-pwd" placeholder="输入新密码(不少于6位)">
+                                <input class="edit-control" type="password" maxlength="16" name="new-pwd"
+                                       placeholder="输入新密码(不少于6位)">
                                 <div class="edit-hint"></div>
                             </div>
                         </label>

@@ -59,25 +59,22 @@
             if ($this.data("confirm") === undefined) {
                 self.option.onClickBtn.apply(self, [$(this).data("type")]);
             } else {
-                if (!self.confirmState) {
-                    return;
-                }
-                let result = self.option.onConfirm.apply(self);
-                if (self.option.repeatConfirm) {
-                    if (result === true) {
-                        self.close();
-                    }
-                } else {
-                    if (result !== undefined && result !== null) {
-                        self.confirmState = true;
-                    }
-                }
+                self.clickConfirm();
             }
         });
         self.visible = false;
         self.jqElements.$window = $(window).on("resize." + self.id, function () {
             if (self.visible) {
                 self.resize();
+            }
+        }).on("keydown." + self.id, function (event) {
+            if (self.visible && event.keyCode === 13) {
+                self.clickConfirm();
+            }
+        });
+        self.jqElements.container.on("keydown." + self.id, function (event) {
+            if (self.visible && event.keyCode === 13) {
+                self.clickConfirm();
             }
         });
         self.confirmState = true;
@@ -111,6 +108,7 @@
                 if (self.option.destroy) {
                     self.jqElements.mask.remove();
                     self.jqElements.container.remove();
+                    self.jqElements.$window.off("resize." + self.id).on("keydown." + self.id);
                 }
             }
         },
@@ -127,6 +125,22 @@
                 left: left + "px",
                 top: top + "px"
             });
+        },
+        clickConfirm: function () {
+            let self = this;
+            if (!self.confirmState) {
+                return;
+            }
+            let result = self.option.onConfirm.apply(self);
+            if (self.option.repeatConfirm) {
+                if (result === true) {
+                    self.close();
+                }
+            } else {
+                if (result !== undefined && result !== null) {
+                    self.confirmState = true;
+                }
+            }
         },
         clearConfirmState: function () {
             this.confirmState = true;

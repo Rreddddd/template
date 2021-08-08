@@ -13,15 +13,6 @@
         <location>/error/404</location>
     </error-page>
 
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -30,7 +21,7 @@
         <param-value>classpath:spring/application-base.xml</param-value>
     </context-param>
 
-    <!-- 过滤器 -->
+    <!-- 编码过滤器 -->
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -49,13 +40,26 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- security核心 -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 忽略静态资源 -->
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/global/*</url-pattern>
         <url-pattern>/pc/js/*</url-pattern>
         <url-pattern>/pc/css/*</url-pattern>
         <url-pattern>/pc/image/*</url-pattern>
+        <url-pattern>/favicon.ico</url-pattern>
     </servlet-mapping>
+    <!-- mvc核心 -->
     <servlet>
         <servlet-name>springMVC</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

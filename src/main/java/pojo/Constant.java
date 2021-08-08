@@ -7,6 +7,5 @@ public abstract class Constant {
     public final static int VERIFY_STATUS_SUCCEED = 1;
     public final static int VERIFY_STATUS_FAIL = 2;
     public final static int VERIFY_STATUS_EXPIRED = 3;
-    public final static int PERMISSION_USER = 0;
-    public final static int PERMISSION_POSITION = 1;
+    public final static String CONTEXT_ACTIVE_MENU = "active_menu";
 }

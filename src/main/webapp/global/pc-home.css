@@ -384,28 +384,28 @@
 .container>.context>.activity>.route>.route-item{
     height: 210%;
     line-height: 22px;
-    cursor: pointer;
     overflow: hidden;
     transform: rotate(18deg) translate(-3px,-11px);
 }
 .container>.context>.activity>.route>.route-item>.route-item-wrapper{
-    width: 120%;
-    padding: 0 15px;
+    padding: 3px 15px 0 15px;
     text-align: center;
     transform: rotate(-18deg) translate(-7px, 8px);
 }
-.container>.context>.activity>.route>.route-item>.route-item-wrapper:hover{
+.container>.context>.activity>.route>.route-item>.route-item-wrapper.home{
+    cursor: pointer;
+}
+.container>.context>.activity>.route>.route-item>.route-item-wrapper.home:hover{
     color: #5f6466;
     background-color: #f2f2f2;
 }
-.container>.context>.activity>.route>.route-item>.route-item-wrapper:active{
+.container>.context>.activity>.route>.route-item>.route-item-wrapper.home:active{
     color: #555b5e;
     background-color: #efefef;
 }
 .container>.context>.activity>.route>.route-item>.route-item-wrapper.active{
     color: #4c5153 !important;
     background-color: transparent !important;
-    cursor: initial;
     font-weight: bold;
 }
 .container>.context>.activity>.route>.route-separation{

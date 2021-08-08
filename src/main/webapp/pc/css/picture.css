@@ -1,0 +1,10 @@
+.img-zoom-container .img-zoom-waiting{
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    position: absolute;
+    z-index: 100000;
+    display: none;
+}
+.img-zoom-container .img-zoom-waiting.show{
+    display: block;
+}

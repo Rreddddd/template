@@ -5,6 +5,7 @@ import entity.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pojo.MsgResult;
+import security.MyDelegatingPasswordEncoder;
 import security.UserPasswordEncoder;
 import service.UserService;
 import util.Context;
@@ -20,7 +21,7 @@ public class HomeController {
     @Resource
     private UserService userService;
     @Resource
-    private UserPasswordEncoder passwordEncoder;
+    private MyDelegatingPasswordEncoder passwordEncoder;
 
     @RequestMapping("")
     public ModelAndView home() {
@@ -51,11 +52,10 @@ public class HomeController {
         currentUser.setPhone(userBean.getPhone());
         currentUser.setEmail(userBean.getEmail());
         if (StringUtils.isNotBlank(userBean.getNewPwd())) {
-            passwordEncoder.encode(userBean.getNewPwd());
             if (!passwordEncoder.matches(userBean.getOldPwd(), currentUser.getPassword())) {
                 return MsgResult.failure("旧密码错误");
             }
-//            currentUser.setPassword(userBean.getNewPwd());
+            currentUser.setPassword(passwordEncoder.encode(userBean.getNewPwd()));
         }
         userService.add(currentUser);
         return MsgResult.success();

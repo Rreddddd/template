@@ -9,7 +9,7 @@
 <c:set var="childrenLength" value="${fn:length(menus)}" scope="page"/>
 <li class="application-item${(first==null || first)?" first":""}">
     <c:set var="first" value="${false}" scope="request"/>
-    <div class="application-item-wrapper${childrenLength>0?" branch":""}"
+    <div class="application-item-wrapper${childrenLength>0?" branch":""}" data-module-id="${innerMenu.menu.module.id}"
          data-item-id="<%=UUID.randomUUID().toString()%>" data-item-url="${innerMenu.menu.module.url}">
         <div class="icon ${innerMenu.menu.iconClass}" style="color: ${innerMenu.menu.iconColor}"></div>
         <div class="name">${innerMenu.menu.title}</div>

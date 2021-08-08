@@ -2,10 +2,12 @@ package entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import util.SerialCloneAble;
 
 import java.util.Date;
+import java.util.List;
 
-public class User {
+public class User extends SerialCloneAble {
 
     private Integer id;
     private String account;
@@ -16,7 +18,7 @@ public class User {
     private String headImg;
     private Date createTime;
     private boolean freeze;
-    private Position position;
+    private List<Position> positions;
 
     public Integer getId() {
         return id;
@@ -90,16 +92,12 @@ public class User {
         this.freeze = freeze;
     }
 
-    public Position getPosition() {
-        return position;
+    public List<Position> getPositions() {
+        return positions;
     }
 
-    public Integer getPositionId() {
-        return position == null ? null : position.getId();
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
     }
 
     public String toJson() {
@@ -109,26 +107,5 @@ public class User {
             e.printStackTrace();
         }
         return "";
-    }
-
-    public User copy() {
-        User newUser = new User();
-        newUser.setId(id);
-        newUser.setAccount(account);
-        newUser.setPassword(password);
-        newUser.setName(name);
-        newUser.setPhone(phone);
-        newUser.setEmail(email);
-        newUser.setHeadImg(headImg);
-        newUser.setCreateTime(createTime);
-        newUser.setFreeze(freeze);
-        if (position != null) {
-            Position newPosition = new Position();
-            newPosition.setId(position.getId());
-            newPosition.setName(position.getName());
-            newPosition.setVisible(position.isVisible());
-            newUser.setPosition(newPosition);
-        }
-        return newUser;
     }
 }

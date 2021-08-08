@@ -4,8 +4,11 @@ import dao.ModuleDao;
 import entity.Module;
 import org.springframework.stereotype.Service;
 import service.ModuleService;
+import util.Modules;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class ModuleServiceImpl implements ModuleService {
@@ -14,7 +17,12 @@ public class ModuleServiceImpl implements ModuleService {
     private ModuleDao moduleDao;
 
     @Override
-    public Module findOne(int id) {
-        return moduleDao.findOne(id);
+    public List<Module> findAll() {
+        return moduleDao.findAll();
+    }
+
+    @PostConstruct
+    private void initCache() {
+        Modules.init(findAll());
     }
 }

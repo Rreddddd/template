@@ -1,14 +1,12 @@
 package util;
 
-import org.springframework.security.core.token.Sha512DigestUtils;
-
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 
-public class WebPathUtil {
+public abstract class WebPathUtil {
 
     private static final String WEB_ROOT_PATH;
     private static final String FILE_STORE = "file_store";
@@ -138,7 +136,7 @@ public class WebPathUtil {
         if (session == null) {
             throw new RuntimeException("context is null");
         }
-        String key = Sha512DigestUtils.shaHex(url + "_" + session.getId());
+        String key = MD5Util.encrypt(url + "_" + session.getId());
         session.setAttribute(key, url);
         return URI_PREFIX + URI_SEPARATOR + key;
     }

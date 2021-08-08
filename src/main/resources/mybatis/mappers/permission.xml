@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dao.PermissionDao">
 
+    <resultMap id="permission" type="Permission">
+        <result column="id" property="id"/>
+        <result column="menu_id" property="menuId"/>
+        <association property="id" javaType="PermissionId">
+            <id column="auth_id" property="authId"/>
+            <id column="type" property="type"/>
+        </association>
+    </resultMap>
+
+    <select id="findAll" resultMap="permission">
+        select p.id,
+               p.auth_id,
+               p.type,
+               p.menu_id
+        from permission p
+    </select>
 </mapper>

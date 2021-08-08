@@ -3,7 +3,7 @@
 <t:templatePage id="pc-home">
 
     <t:templateContent id="title">
-        模块管理
+        首页
     </t:templateContent>
 
     <t:templateContent id="body">

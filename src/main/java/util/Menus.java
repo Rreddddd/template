@@ -1,9 +1,6 @@
 package util;
 
-import entity.Menu;
-import entity.Permission;
-import entity.Position;
-import entity.User;
+import entity.*;
 import pojo.Constant;
 
 import java.util.*;
@@ -59,24 +56,6 @@ public abstract class Menus {
         }
     }
 
-    public static void update(int id, int type, Collection<Permission> permissions) {
-        InnerMenu innerMenu = getInner(id);
-        if (innerMenu != null) {
-            synchronized (innerMenu) {
-                Set<Permission> innerPermissions = new HashSet<>();
-                for (Permission permission : innerMenu.permissions) {
-                    if (type != permission.getType()) {
-                        innerPermissions.add(permission);
-                    }
-                }
-                if (permissions != null && !permissions.isEmpty()) {
-                    innerPermissions.addAll(permissions);
-                }
-                innerMenu.permissions = innerPermissions;
-            }
-        }
-    }
-
     public static void remove(int id) {
         InnerMenu innerMenu = getInner(id);
         if (innerMenu != null) {
@@ -99,8 +78,8 @@ public abstract class Menus {
             return new TreeSet<>(COMPARATOR);
         }
         Set<InnerMenu> innerMenus = getInner(-1).children;
-        Position position = user.getPosition();
-        if (position != null && position.getId() == 1) {//超级管理员特殊处理
+        List<Position> positions = user.getPositions();
+        if (positions != null && positions.size() > 0 && positions.contains(Position.ADMIN_POSITION)) {//超级管理员特殊处理
             return innerMenus;
         }
         return getCurrentMenus(user, innerMenus);
@@ -133,12 +112,10 @@ public abstract class Menus {
     public static class InnerMenu {
 
         private final Menu menu;
-        private Set<Permission> permissions;
         private Set<InnerMenu> children;
 
         private InnerMenu(Menu menu) {
             this.menu = menu;
-            this.permissions = new HashSet<>();
             reSort();
         }
 
@@ -151,26 +128,21 @@ public abstract class Menus {
         }
 
         private InnerMenu copy() {
-            return new InnerMenu(menu.copy());
+            return new InnerMenu((Menu) menu.clone());
         }
 
         public boolean checkPermission(User user) {
-            if (user == null) {
+            if (user == null || menu == null) {
                 return false;
             }
-            if (permissions.contains(new Permission(user.getId(), Constant.PERMISSION_USER))) {
+            if (Permissions.check(user, menu.getId())) {
                 return true;
             }
-            Position position = user.getPosition();
-            return position != null && permissions.contains(new Permission(position.getId(), Constant.PERMISSION_POSITION));
+            return getInner(menu.getParentId()).checkPermission(user);
         }
 
         public Menu getMenu() {
             return menu;
-        }
-
-        public Set<Permission> getPermissions() {
-            return permissions;
         }
 
         public Set<InnerMenu> getChildren() {

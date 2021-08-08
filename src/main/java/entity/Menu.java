@@ -1,6 +1,8 @@
 package entity;
 
-public class Menu {
+import util.SerialCloneAble;
+
+public class Menu extends SerialCloneAble {
 
     private Integer id;
     private int parentId;
@@ -64,23 +66,5 @@ public class Menu {
 
     public void setOrder(int order) {
         this.order = order;
-    }
-
-    public Menu copy() {
-        Menu newMenu = new Menu();
-        newMenu.setId(id);
-        newMenu.setParentId(parentId);
-        if (module != null) {
-            Module newModule = new Module();
-            newModule.setId(module.getId());
-            newModule.setTitle(module.getTitle());
-            newModule.setUrl(module.getUrl());
-            newMenu.setModule(newModule);
-        }
-        newMenu.setTitle(title);
-        newMenu.setIconClass(iconClass);
-        newMenu.setIconColor(iconColor);
-        newMenu.setOrder(order);
-        return newMenu;
     }
 }

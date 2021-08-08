@@ -5,16 +5,14 @@ import java.util.Objects;
 public class Permission {
 
     private Integer id;
-    private int authId;
+    private PermissionId pid;
     private int menuId;
-    private int type;
 
     public Permission() {
     }
 
-    public Permission(int authId, int type) {
-        this.authId = authId;
-        this.type = type;
+    public Permission(PermissionId id) {
+        this.pid = id;
     }
 
     public Integer getId() {
@@ -25,12 +23,12 @@ public class Permission {
         this.id = id;
     }
 
-    public int getAuthId() {
-        return authId;
+    public PermissionId getPid() {
+        return pid;
     }
 
-    public void setAuthId(int authId) {
-        this.authId = authId;
+    public void setPid(PermissionId pid) {
+        this.pid = pid;
     }
 
     public int getMenuId() {
@@ -41,24 +39,16 @@ public class Permission {
         this.menuId = menuId;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Permission that = (Permission) o;
-        return authId == that.authId && type == that.type;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(authId, type);
+        return Objects.hash(id);
     }
 }

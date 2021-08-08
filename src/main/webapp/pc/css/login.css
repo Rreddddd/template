@@ -79,3 +79,7 @@ body {
     margin-left: 12px;
     cursor: pointer;
 }
+
+.login-window .form-row{
+    height: 31px;
+}

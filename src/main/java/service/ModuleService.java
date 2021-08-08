@@ -2,7 +2,9 @@ package service;
 
 import entity.Module;
 
+import java.util.List;
+
 public interface ModuleService {
 
-    Module findOne(int id);
+    List<Module> findAll();
 }

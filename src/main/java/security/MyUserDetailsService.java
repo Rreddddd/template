@@ -20,8 +20,6 @@ public class MyUserDetailsService implements UserDetailsService {
             return null;
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-//        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         return new User(user.getAccount(), user.getPassword(), !user.isFreeze(), true, true, true, authorities);
     }
 }

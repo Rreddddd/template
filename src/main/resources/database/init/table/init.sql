@@ -11,7 +11,6 @@ CREATE TABLE `user`
     `head_img`    varchar(100) NULL COMMENT '头像相对路径',
     `create_time` datetime     NOT NULL COMMENT '创建时间',
     `freeze`      bit          NOT NULL DEFAULT b'0' COMMENT '是否冻结',
-    `position_id` int          NULL COMMENT '职位/身份',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `index1` (`account`) USING HASH
 );
@@ -57,8 +56,8 @@ CREATE TABLE `permission`
 (
     `id`      int(11) NOT NULL AUTO_INCREMENT,
     `auth_id` int(11) NOT NULL COMMENT '授权方',
-    `menu_id` int(11) NOT NULL COMMENT '菜单',
     `type`    int(2)  NOT NULL COMMENT '0:用户,1:职位/身份',
+    `menu_id` int(11) NOT NULL COMMENT '菜单',
     PRIMARY KEY (`id`),
     INDEX `index1` (`auth_id`, `type`) USING BTREE
 );
@@ -71,12 +70,25 @@ CREATE TABLE `position`
     `visible` bit         NOT NULL,
     PRIMARY KEY (`id`)
 );
+-- 人员_职位 关联
+DROP TABLE IF EXISTS `user_position`;
+CREATE TABLE `user_position`
+(
+    `user_id`     int(11) NOT NULL,
+    `position_id` int(11) NOT NULL,
+    PRIMARY KEY (`user_id`, `position_id`)
+);
 
 insert into user
-values (null, 'admin', '{red}{MD5}202cb962ac59075b964b07152d234b70', 'Administrator', null, null, null, now(), 0, 1);
+values (null, 'admin', '{red}{red1}ac360b7295f9c09b7a284df3d2be2659', 'Administrator', null, null, null, now(), 0);
+insert into user
+values (null, 'test', '{red}{red1}ac360b7295f9c09b7a284df3d2be2659', 'test', null, null, null, now(), 0);
 
 insert into position
 values (null, '超级管理员', 0);
+
+insert into user_position
+values (1, 1);
 
 insert into module
 values (1, '模块管理', '/sys/module');

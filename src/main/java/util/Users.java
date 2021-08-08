@@ -59,7 +59,7 @@ public abstract class Users {
                     cacheUser.setEmail(user.getEmail());
                     cacheUser.setHeadImg(user.getHeadImg());
                     cacheUser.setFreeze(user.isFreeze());
-                    cacheUser.setPosition(user.getPosition());
+                    cacheUser.setPositions(user.getPositions());
                 }
             }
         }
@@ -73,6 +73,6 @@ public abstract class Users {
     public static User get(String account) {
         ensureAccount(account);
         User user = USER_MAP.get(account);
-        return user == null ? null : user.copy();
+        return user == null ? null : (User) user.clone();
     }
 }

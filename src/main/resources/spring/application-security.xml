@@ -8,11 +8,11 @@
 
     <security:authentication-manager alias="authenticationManager" erase-credentials="false">
         <security:authentication-provider user-service-ref="myUserDetailsService">
-            <security:password-encoder ref="userPasswordEncoder"/>
+            <security:password-encoder ref="myDelegatingPasswordEncoder"/>
         </security:authentication-provider>
     </security:authentication-manager>
 
-    <security:http auto-config="true"
+    <security:http auto-config="false"
                    use-expressions="false"
                    entry-point-ref="myAuthenticationEntryPoint"
                    authentication-manager-ref="authenticationManager">
@@ -34,33 +34,36 @@
         <security:remember-me remember-me-cookie="red_remember_template"
                               token-repository-ref="myPersistentTokenRepository"
                               authentication-success-handler-ref="myAuthenticationSuccessHandler"/>
-
         <security:custom-filter ref="myUsernamePasswordAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
+        <security:custom-filter ref="myFilterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
         <security:csrf disabled="true"/>
     </security:http>
 
     <bean id="myUserDetailsService" class="security.MyUserDetailsService"/>
+
     <!--    密码加密-->
-    <bean id="userPasswordEncoder" class="security.UserPasswordEncoder">
+    <bean id="myDelegatingPasswordEncoder" class="security.MyDelegatingPasswordEncoder">
         <constructor-arg index="0" value="red"/>
         <constructor-arg index="1">
             <map>
-                <entry key="red" value-ref="myDelegatingPasswordEncoder"/>
+                <entry key="red" value-ref="userPasswordEncoder"/>
             </map>
         </constructor-arg>
     </bean>
-    <bean id="myDelegatingPasswordEncoder"
-          class="org.springframework.security.crypto.password.DelegatingPasswordEncoder">
-        <constructor-arg index="0" value="MD5"/>
+    <bean id="userPasswordEncoder" class="security.UserPasswordEncoder">
+        <constructor-arg index="0" value="red1"/>
         <constructor-arg index="1">
             <map>
-                <entry key="MD5" value-ref="md5PasswordEncoder"/>
+                <entry key="red1" value-ref="userMD5PasswordEncoder"/>
             </map>
         </constructor-arg>
     </bean>
-    <bean id="md5PasswordEncoder" class="org.springframework.security.crypto.password.MessageDigestPasswordEncoder">
-        <constructor-arg index="0" value="MD5"/>
+    <bean id="userMD5PasswordEncoder"
+          class="security.UserMD5PasswordEncoder">
+        <property name="prefixSaltStr" value="12"/>
+        <property name="suffixSaltStr" value="tbt"/>
     </bean>
+
     <bean id="myAuthenticationEntryPoint" class="security.MyAuthenticationEntryPoint"/>
     <bean id="myAuthenticationProvider" class="security.provider.MyAuthenticationProvider"/>
     <!--    登录处理器-->
@@ -86,4 +89,25 @@
     </bean>
     <!--    登出处理器-->
     <bean id="myLogoutSuccessHandler" class="security.handler.MyLogoutSuccessHandler"/>
+    <!-- 认证过滤器 -->
+    <bean id="myFilterSecurityInterceptor"
+          class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
+        <property name="accessDecisionManager" ref="myAccessDecisionManager"/>
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="securityMetadataSource" ref="myFilterInvocationSecurityMetadataSource"/>
+        <property name="publishAuthorizationSuccess" value="true"/>
+    </bean>
+    <bean id="myAccessDecisionManager" class="security.MyAccessDecisionManager">
+        <constructor-arg index="0">
+            <bean class="security.voter.BaseVoter"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <list>
+                <bean class="security.voter.UserAssignVoter"/>
+            </list>
+        </constructor-arg>
+    </bean>
+    <bean id="myFilterInvocationSecurityMetadataSource" class="security.MyFilterInvocationSecurityMetadataSource"/>
+    <!--   url验证成功后事件监听 -->
+    <bean id="publishAuthorizationSuccessListener" class="security.listener.PublishAuthorizationSuccessListener"/>
 </beans>
