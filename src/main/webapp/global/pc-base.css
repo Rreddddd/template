@@ -185,11 +185,11 @@ button.form-editor.info {
 }
 
 button.form-editor.info:hover {
-    background-color: #4d8aec;
+    background-color: #4d81d5;
 }
 
 button.form-editor.info:active {
-    background-color: #5188e0;
+    background-color: #4e6fa3;
 }
 
 button.form-editor.update {
@@ -217,7 +217,8 @@ button.form-editor.delete:active {
 }
 
 button.form-editor.default {
-    background-color: #f0f0f0;
+    background-color: #c7bbbb;
+    color: #ffffff;
 }
 
 button.form-editor.default:hover {
@@ -245,6 +246,18 @@ button.form-editor.default:active {
 /*自定义表格*/
 .custom-table{
     width: 100%;
+    position: relative;
+}
+.custom-table>.table-mask{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(230,230,230,0.3) url("/pc/image/table-loding.gif") no-repeat;
+    background-size: 48px;
+    background-position-x: 48%;
+    background-position-y: 48%;
 }
 .custom-table>table{
     width: 100%;

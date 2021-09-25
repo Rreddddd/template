@@ -78,7 +78,9 @@
             }
         });
         self.confirmState = true;
-        self.open();
+        if (self.option.initOpen) {
+            self.open();
+        }
     };
 
     Modal.prototype = {
@@ -146,6 +148,7 @@
             this.confirmState = true;
         },
         defaultOption: {
+            initOpen: true,
             title: "",
             iconClass: "",
             width: 0,
@@ -174,7 +177,7 @@
             if (option.btn === undefined) {
                 option.btn = [$.modal.btn.confirm];
             }
-            this.installPlug(Modal, "modal-instance", arguments, "open");
+            return this.installPlug(Modal, "modal-instance", arguments, "open");
         }
     });
 
@@ -229,8 +232,8 @@
 
     $.modal.btn = {
         confirm: '<button data-type="1" data-confirm class="form-editor add btn">确定</button>',
-        yes: '<button data-type="2" data-confirm class="form-editor info btn">是</button>',
-        no: '<button data-type="3" data-confirm class="form-editor default btn">否</button>'
+        yes: '<button data-type="2" class="form-editor info btn">是</button>',
+        no: '<button data-type="3" class="form-editor default btn">否</button>'
     };
 
     $.alert.btn = {

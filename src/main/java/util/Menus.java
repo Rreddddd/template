@@ -72,6 +72,10 @@ public abstract class Menus {
         return MENU_MAP.get(id);
     }
 
+    public static InnerMenu getInnerTree() {
+        return MENU_MAP.get(-1);
+    }
+
     public static Set<InnerMenu> getCurrentMenus() {
         User user = Context.getUser();
         if (user == null) {

@@ -77,19 +77,23 @@
         self.jqElements = {
             container: ele.addClass("custom-table").empty()
         };
+        self.jqElements.mask = $('<div class="table-mask" style="display: none;"></div>').appendTo(self.jqElements.container);
         self.jqElements.thead = $('<table class="table-header"><thead></thead></table>').appendTo(self.jqElements.container);
         self.jqElements.tbody = $('<table class="table-body"><tbody></tbody></table>').appendTo(self.jqElements.container);
         self.jqElements.footer = $('<table class="table-footer"><tbody></tbody></table>').appendTo(self.jqElements.container);
         self.jqElements.bottom = $('<div class="table-bottom">' +
             '<label class="page-rows">' +
             '<span>每页条数</span>' +
-            '<select>' +
-            '<option>10</option>' +
-            '<option>20</option>' +
+            '<select class="table-page-size">' +
+            '<option value="10">10</option>' +
+            '<option value="20">20</option>' +
+            '<option value="50">50</option>' +
+            '<option value="100">100</option>' +
+            '<option value="500">500</option>' +
             '</select>' +
             '</label>' +
             '<span>' +
-            '第<span>1</span>页（共<span>2</span>页 10条数据）' +
+            '第<span class="table-page-index">1</span>页（共<span class="table-page-count">2</span>页 <span class="table-records"></span>条数据）' +
             '</span>' +
             '<ul class="pager">' +
             '<li class="first">上一页</li>' +
@@ -101,8 +105,40 @@
             '<li class="last">下一页</li>' +
             '</ul>' +
             '</div>').appendTo(self.jqElements.container);
+        self.jqElements.pager = self.jqElements.bottom.find(".pager").delegate(">li", "click", function () {
+            let $this = $(this);
+            if ($this.hasClass("first")) {
+                if (self.pageIndex <= 1) {
+                    return;
+                }
+                self.pageIndex--;
+            } else if ($this.hasClass("last")) {
+                if (self.pageIndex >= self.jqElements.pager.data("pageCount")) {
+                    return;
+                }
+                self.pageIndex++;
+            } else {
+                let index = Number($this.data("index"));
+                if (self.pageIndex !== index) {
+                    self.pageIndex = index;
+                } else {
+                    return;
+                }
+            }
+            self.requestData();
+        });
+        self.pageIndex = 1;
+        self.pageSize = self.option.pageSize;
+        self.jqElements.bottom.find(".table-page-size").on("change", function () {
+            self.pageSize = Number($(this).val());
+            self.pageIndex = 1;
+            self.requestData();
+        }).val(self.pageSize);
+        if (!self.option.page) {
+            self.jqElements.bottom.hide();
+        }
         self.setColumns(self.option.columns);
-        self.loadData(self.option.data);
+        self.requestData();
     };
 
     Table.prototype = {
@@ -123,15 +159,54 @@
                 self.option.columns = columns;
             }
         },
+        requestData: function () {
+            let self = this;
+            if (self.option.url) {
+                self.jqElements.mask.show();
+                let params = self.option.params;
+                if ($.isFunction(params)) {
+                    params = params.apply(self);
+                }
+                params = params || {};
+                params.pageIndex = self.pageIndex;
+                params.pageSize = self.pageSize;
+                $.ajax({
+                    type: "get",
+                    url: self.option.url,
+                    data: params,
+                    dataType: "json",
+                    success: function (msg) {
+                        self.loadData(msg);
+                        if (self.option.page) {
+                            let records = msg.records || 0;
+                            let pageCount = Math.ceil(records / params.pageSize);
+                            let lis = '<li class="first">上一页</li>';
+                            for (let i = 1; i <= pageCount; i++) {
+                                lis += '<li data-index="' + i + '" class="' + (params.pageIndex === i ? ' active' : '') + '">' + i + '</li>';
+                            }
+                            lis += '<li class="last">下一页</li>';
+                            self.jqElements.pager.data("pageCount", pageCount);
+                            self.jqElements.pager.html(lis);
+                            self.jqElements.bottom.find(".table-page-index").text(self.pageIndex);
+                            self.jqElements.bottom.find(".table-page-count").text(pageCount);
+                            self.jqElements.bottom.find(".table-records").text(records);
+                        }
+                        self.jqElements.mask.hide();
+                    }
+                });
+            }
+        },
         loadData: function (data) {
             if (data) {
                 let self = this;
                 let rows = $.isArray(data) ? data : (data.rows || []);
+                self.dataRows = rows;
                 let fields = self.option.columns[0] || [];
-                let tbody = self.jqElements.tbody.find("tbody");
+                let tbody = self.jqElements.tbody.find("tbody").empty();
                 for (let i = 0; i < rows.length; i++) {
                     let rowData = rows[i];
-                    let tr = $('<tr/>').data("rowData",rowData).appendTo(tbody);
+                    rowData.order = (self.pageIndex - 1) * self.pageSize + 1 + i;
+                    let tr = $('<tr/>').data("rowData", rowData).appendTo(tbody);
                     for (let k = 0; k < fields.length; k++) {
                         let field = fields[k];
                         let td = $('<td/>').appendTo(tr);
@@ -147,9 +222,13 @@
             }
         },
         defaultOption: {
+            page: false,
+            pageSize: 10,
             showFooter: false,
             showPage: false,
-            columns: []
+            columns: [],
+            url: "",
+            params: {}
         }
     };
 
@@ -224,4 +303,73 @@
             return newArr;
         }
     };
+
+    //提供监听div宽高变化的方法
+    (function ($, h, c) {
+        var a = $([]), e = $.resize = $.extend($.resize, {}), i, k = "setTimeout", j = "resize", d = j
+            + "-special-event", b = "delay", f = "throttleWindow";
+        e[b] = 350;
+        e[f] = true;
+        $.event.special[j] = {
+            setup: function () {
+                if (!e[f] && this[k]) {
+                    return false
+                }
+                var l = $(this);
+                a = a.add(l);
+                $.data(this, d, {
+                    w: l.width(),
+                    h: l.height()
+                });
+                if (a.length === 1) {
+                    g()
+                }
+            },
+            teardown: function () {
+                if (!e[f] && this[k]) {
+                    return false
+                }
+                var l = $(this);
+                a = a.not(l);
+                l.removeData(d);
+                if (!a.length) {
+                    clearTimeout(i)
+                }
+            },
+            add: function (l) {
+                if (!e[f] && this[k]) {
+                    return false
+                }
+                var n;
+
+                function m(s, o, p) {
+                    var q = $(this), r = $.data(this, d);
+                    r.w = o !== c ? o : q.width();
+                    r.h = p !== c ? p : q.height();
+                    n.apply(this, arguments)
+                }
+
+                if ($.isFunction(l)) {
+                    n = l;
+                    return m
+                } else {
+                    n = l.handler;
+                    l.handler = m
+                }
+            }
+        };
+
+        function g() {
+            i = h[k](function () {
+                a.each(function () {
+                    var n = $(this), m = n.width(), l = n.height(), o = $
+                        .data(this, d);
+                    if (m !== o.w || l !== o.h) {
+                        n.trigger(j, [o.w = m, o.h = l])
+                    }
+                });
+                g()
+            }, e[b])
+        }
+    })(jQuery, this);
 }(jQuery);

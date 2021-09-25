@@ -411,6 +411,9 @@
                 cursorcolor: "#efefef",
                 cursorwidth: 10
             });
+            panelContainer.find(".panel-content").on("resize",function(){
+                panelWrapper.resize();
+            });
         },
         toggleMenu: function () {
             let self = this;

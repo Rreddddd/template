@@ -21,6 +21,34 @@ public class ModuleServiceImpl implements ModuleService {
         return moduleDao.findAll();
     }
 
+    @Override
+    public List<Module> findPage(int pageIndex, int pageSize) {
+        return moduleDao.findPage(pageIndex, pageSize);
+    }
+
+    @Override
+    public Integer findCount() {
+        return moduleDao.findCount();
+    }
+
+    @Override
+    public void add(Module module) {
+        moduleDao.add(module);
+        Modules.put(module);
+    }
+
+    @Override
+    public void update(Module module) {
+        moduleDao.update(module);
+        Modules.update(module);
+    }
+
+    @Override
+    public void delete(int id) {
+        moduleDao.delete(id);
+        Modules.remove(id);
+    }
+
     @PostConstruct
     private void initCache() {
         Modules.init(findAll());

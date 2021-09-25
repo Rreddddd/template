@@ -3,33 +3,35 @@
 <t:templatePage id="pc-home">
 
     <t:templateContent id="head">
-        <script>
-            let table;
-            home.on("init",function(){
-                table=$("#table").table({
-                    columns : [
-                        [
-                            {title:"序号",field:"order",align:"center",width:"5%"},
-                            {title:"应用名称",field:"title",align:"left",width:"35%"},
-                            {title:"应用链接",field:"url",align:"left",width:"40%"},
-                            {title:"操作",field:"operate",align:"center",width:"20%"},
-                        ]
-                    ],
-                    data:[{},{},{},{},{}]
-                });
-                loadData();
-            });
-
-            function loadData(){
-                $.ajax({
-                    type : "post",
-                    url : "/sys/module/data",
-                    dataType : "json",
-                    success : function(msg){
-                        table.table("loadData",msg);
-                    }
-                });
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/jquery-smart-select.css">
+        <script src="${pageContext.request.contextPath}/pc/js/jquery-smart-select.js"></script>
+        <style type="text/css">
+            .smart-select-container{
+                height: 95%;
             }
+            .menu-wrapper{
+                display: flex;
+                height: 79%;
+            }
+            .menu-tree{
+                flex: 0 0 300px;
+            }
+            .menu-info{
+                flex: 1 1 100%;
+            }
+        </style>
+        <script>
+            home.on("init",function(){
+                $("#menu-tree").smartSelect({
+                    idField : "id",
+                    textField : "text",
+                    panelHeight : "auto",
+                    url: "/sys/menu/data",
+                    type : "panel",
+                    paneTitle : "菜单列表",
+                    sortable : true
+                });
+            });
         </script>
     </t:templateContent>
     <t:templateContent id="body">
@@ -39,8 +41,11 @@
                 添加
             </button>
         </div>
-        <div class="penal-body">
-            <div class="custom-table" id="table">
+        <div class="penal-body menu-wrapper">
+            <div class="menu-tree">
+                <select id="menu-tree"></select>
+            </div>
+            <div class="menu-info">
 
             </div>
         </div>

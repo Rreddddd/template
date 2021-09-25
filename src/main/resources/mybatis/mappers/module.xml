@@ -8,10 +8,45 @@
         <result column="url" property="url"/>
     </resultMap>
 
+    <resultMap id="module_count" type="Integer">
+        <result column="count"/>
+    </resultMap>
+
     <select id="findAll" resultMap="module">
         select m.id,
                m.title,
                m.url
         from module m
     </select>
+
+    <select id="findPage" resultMap="module">
+        select m.id,
+        m.title,
+        m.url
+        from module m
+        <include refid="dao.BaseDao.limit"/>
+    </select>
+
+    <select id="findCount" resultType="Integer">
+        select count(1)
+        from module m
+    </select>
+
+    <insert id="add" parameterType="module">
+        insert into module
+        values (null, #{title}, #{url})
+    </insert>
+
+    <update id="update" parameterType="module">
+        update module m
+        set m.title=#{title},
+            m.url=#{url}
+        where m.id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete
+        from module
+        where id = #{id}
+    </delete>
 </mapper>
