@@ -3,17 +3,31 @@
 <t:templatePage id="pc-home">
 
     <t:templateContent id="head">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/jquery.tagsinput-revisited.css">
+        <script src="${pageContext.request.contextPath}/pc/js/jquery.tagsinput-revisited.js"></script>
         <script>
             let table, addModal;
             home.on("init", function () {
                 table = $("#table").table({
-                    page: true,
-                    url: "/sys/module/data",
+                    url: "/sys/position/data",
                     columns: [
                         [
                             {title: "序号", field: "order", align: "center", width: "5%"},
-                            {title: "应用名称", field: "title", align: "left", width: "35%"},
-                            {title: "应用链接", field: "url", align: "left", width: "40%"},
+                            {title: "职位名称", field: "name", align: "left", width: "25%"},
+                            {
+                                title: "已分配人员", field: "users", align: "left", width: "50%",
+                                formatter: function (index, field, rowData) {
+                                    let users=rowData.users;
+                                    if (!users || users.length === 0) {
+                                        return "";
+                                    }
+                                    let names = [];
+                                    for (let i = 0; i < users.length; i++) {
+                                        names.push(users[i].name);
+                                    }
+                                    return names.join("、");
+                                }
+                            },
                             {
                                 title: "操作",
                                 field: "operate",
@@ -38,25 +52,30 @@
                     initOpen: false,
                     onConfirm: function () {
                         let id = addModal.data("id");
-                        let title = addModal.find("input[name='title']").val();
-                        if (!title) {
-                            $.alert("模块名称不能为空");
+                        let name = addModal.find("input[name='name']").val();
+                        if (!name) {
+                            $.alert("职位名称不能为空");
                             return;
                         }
-                        let url = addModal.find("input[name='url']").val();
-                        if (!url) {
-                            $.alert("模块名称不能为空");
-                            return;
+                        let users = addModal.find("input[name='users']").val();
+                        let persons=[];
+                        if(users){
+                            let split = users.split(",");
+                            for(let i=0;i<split.length;i++){
+                                persons.push({
+                                    id : split[i]
+                                });
+                            }
                         }
-                        let module = {
+                        let position = {
                             id: id,
-                            title: title,
-                            url: url
+                            name: name,
+                            users: persons
                         };
                         $.ajax({
                             type: "post",
-                            url: "/sys/module/" + (module.id ? "update" : "add"),
-                            data: JSON.stringify(module),
+                            url: "/sys/position/" + (position.id ? "update" : "add"),
+                            data: JSON.stringify(position),
                             dataType: "json",
                             contentType: "application/json",
                             success: function (msg) {
@@ -71,17 +90,43 @@
                         });
                     }
                 });
+                addModal.find("input[name='users']").tagsInput({
+                    placeholder: '添加人员',
+                    width: '100%',
+                    minHeight: '140px',
+                    defaultText: "添加人员",
+                    tagColor: "#0079ff",
+                    autocomplete: {
+                        idField: "id",
+                        textField: "name",
+                        source: '/sys/position/searchPersons',
+                        minLength: 0
+                    }
+                });
             });
 
             function add() {
-                addModal.find("input[name='title']").val("");
-                addModal.find("input[name='url']").val("");
+                addModal.find("input[name='name']").val("");
+                addModal.find("input[name='users']").val("").clearTag();
                 addModal.data("id", "").modal("open");
             }
 
             function edit(rowData) {
-                addModal.find("input[name='title']").val(rowData.title);
-                addModal.find("input[name='url']").val(rowData.url);
+                addModal.find("input[name='name']").val(rowData.name);
+                let usersInput = addModal.find("input[name='users']");
+                usersInput.val("").clearTag();
+                let users = rowData.users;
+                if(users && users.length>0){
+                    for(let i=0;i<users.length;i++){
+                        usersInput.addTag({
+                            id : users[i].id+"",
+                            value : users[i].name
+                        },{
+                            focus: true,
+                            color: "#0079ff"
+                        });
+                    }
+                }
                 addModal.data("id", rowData.id).modal("open");
             }
 
@@ -93,7 +138,7 @@
                         if (type === $.alert.btn.yes) {
                             $.ajax({
                                 type: "post",
-                                url: "/sys/module/delete",
+                                url: "/sys/position/delete",
                                 data: {
                                     id: rowData.id
                                 },
@@ -129,26 +174,25 @@
         <div class="modal-container" id="module-add-modal">
             <div class="modal-header">
                 <span class="modal-icon "></span>
-                <span class="modal-title">添加新模块</span>
+                <span class="modal-title">添加新职位</span>
                 <div class="modal-close">x</div>
             </div>
             <div class="modal-body">
                 <div class="user-info-container">
                     <div class="form-row">
                         <div class="edit-wrapper">
-                            <span class="edit-title">应用名称 :</span>
+                            <span class="edit-title">职位名称 :</span>
                             <div class="edit-value">
-                                <input class="edit-control" maxlength="20" type="text" name="title"
-                                       placeholder="输入应用名称(必填)">
+                                <input class="edit-control" maxlength="20" type="text" name="name"
+                                       placeholder="输入职位名称(必填)">
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
                         <label class="edit-wrapper">
-                            <span class="edit-title">应用链接 :</span>
+                            <span class="edit-title">分配人员 :</span>
                             <div class="edit-value">
-                                <input class="edit-control" maxlength="50" type="text" name="url"
-                                       placeholder="输入应用链接(必填)">
+                                <input class="edit-control" type="text" name="users">
                             </div>
                         </label>
                     </div>

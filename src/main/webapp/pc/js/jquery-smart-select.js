@@ -228,6 +228,18 @@
         reLoad : function(){
             this.getTree().reLoad();
         },
+        appendItem : function(row){
+            this.getTree().appendItem(row);
+        },
+        appendChildItem : function(row){
+            this.getTree().appendChildItem(row);
+        },
+        deleteItem : function(){
+            this.getTree().deleteItem();
+        },
+        reBuildItem : function(row){
+            this.getTree().reBuildItem(row);
+        },
         loadData : function(data){
             this.getTree().loadData(data);
         },
@@ -362,6 +374,7 @@
             sortable : false,//是否开启拖动排序
             selectLinkage : true,//多选是否父子级联动
             selectParent : undefined,//指定是否可选父级 true/false 单选默认 false 多选默认 true
+            checkable : true,
             placeholder : "",
             paneTitle : "项目部",
             data : undefined,//该参数不为空时，加载完成后将不发启url请求，reLoad方法不使用此参数。参数为空时加载开始会将option元素对应的值封装成此参数（无法封装成 tree 集合）
@@ -631,13 +644,62 @@
                 self.selectInstance.ele.triggerHandler("smart.select.load");
             },1);
         },
+        appendItem : function(row){
+            let self=this;
+            let node = self.jqElement.treeContainer.find(".selected");
+            if(node.length>0){
+                self.buildItem(node.parent().parent(),row,node.data("level"));
+                self.validIds.push(row[self.option.idField]);
+                self.select(row[self.option.idField]);
+            }
+        },
+        appendChildItem : function(row){
+            let self=this;
+            let node = self.jqElement.treeContainer.find(".selected");
+            if(node.length>0){
+                let ul = node.next();
+                if(ul.length===0){
+                    ul=$('<ul/>').appendTo(node.parent());
+                }
+                self.buildItem(ul,row,node.data("level")+1);
+                self.validIds.push(row[self.option.idField]);
+                self.select(row[self.option.idField]);
+            }
+        },
+        deleteItem : function(){
+            let self=this;
+            let node = self.jqElement.treeContainer.find(".selected");
+            if(node.length>0){
+                let prev = node.parent().prev();
+                if(prev.length===0){
+                    prev=node.parent().parent().prev();
+                }else{
+                    prev=prev.find(">.smart-tree-node");
+                }
+                node.parent().remove();
+                prev.click();
+            }
+        },
+        reBuildItem : function(row){
+            let self=this;
+            let node = self.findItem(row[self.option.idField]);
+            if(node.length===0){
+                node=self.jqElement.treeContainer.find(".selected");
+            }
+            if(node.length>0){
+                let rowData = node.data("rowData");
+                $.extend(rowData,row);
+                node.find(".tree-node-title").text(rowData[self.option.textField] || "");
+                node.find(".tree-node-icon").attr("class",'tree-node-icon '+(row.iconClass || "")).css("color",row.iconColor || "");
+            }
+        },
         buildItem : function(container,row,level){
             var self=this,i;
             var li=$('<li>' +
                         '<div class="smart-tree-node">' +
                         '</div>'+
                     '</li>').appendTo(container);
-            var node=li.find(".smart-tree-node").attr("data-id",row[self.option.idField]).data("rowData",row);
+            var node=li.find(".smart-tree-node").attr("data-id",row[self.option.idField]).data("level",level).data("rowData",row);
             for(i=0;i<level;i++){
                 node.append('<span class="tree-node-indent"/>');
             }
@@ -671,15 +733,17 @@
                 if(row.state!=="closed"){
                     node.find(">.tree-node-hit").click();
                 }
-                node.append('<span class="tree-node-icon tree-node-folder"/>');
+                node.append('<span class="tree-node-icon '+(row.iconClass || "tree-node-folder")+'"'+(row.iconColor?' style="color:'+row.iconColor+'"':'')+'/>');
             }else{
                 node.append('<span class="tree-node-indent"/>');
-                node.append('<span class="tree-node-icon tree-node-file"/>');
+                node.append('<span class="tree-node-icon '+(row.iconClass || "tree-node-file")+'"'+(row.iconColor?' style="color:'+row.iconColor+'"':'')+'/>');
             }
             if(row.disabled===true){
                 node.addClass("_disabled").data("disabled",true);
-            }else{
+            }else if(self.option.checkable){
                 node.append('<span class="tree-node-checkbox tree-node-checkbox0"/>');
+            }else{
+                node.addClass("selectable");
             }
             var text=row[self.option.textField] || "";
             node.append($('<span class="tree-node-title"/>').text(text));
@@ -887,6 +951,9 @@
             self.selectInstance.ids.push(id);
             self.selectInstance.texts.push(value[self.option.textField]);
             self.selectInstance.values.push(value);
+            if(node.hasClass("selectable")){
+                node.addClass("selected");
+            }
             node.find(".tree-node-checkbox").attr("class","tree-node-checkbox tree-node-checkbox1");
             self.selectInstance.jqElement._input.val(self.selectInstance.texts.join(","));
             if(self.option.multiple && self.option.selectParent){
@@ -1054,6 +1121,9 @@
             }else{
                 node.find(".tree-node-checkbox").attr("class","tree-node-checkbox tree-node-checkbox0");
             }
+            if(node.hasClass("selectable")){
+                node.removeClass("selected");
+            }
             if(self.option.multiple && self.option.selectParent){
                 self.selectInstance.ele.val(self.selectInstance.ids);
                 if(unSelectChildState && value.children && value.children.length>0){//级联子集
@@ -1100,6 +1170,7 @@
             }else{
                 self.selectInstance.ele.val("");
             }
+            self.jqElement.container.find(".smart-tree-node.selectable").removeClass("selected");
             if(eventState){
                 self.option.onUnSelectAll.apply(self);
                 self.option.onChange.apply(self);

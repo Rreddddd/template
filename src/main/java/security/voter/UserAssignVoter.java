@@ -4,7 +4,7 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.FilterInvocation;
-import util.Permissions;
+import util.Menus;
 import util.Users;
 
 import java.util.ArrayList;
@@ -20,7 +20,8 @@ public class UserAssignVoter implements AccessDecisionVoter<FilterInvocation> {
     @Override
     public int vote(Authentication authentication, FilterInvocation filterInvocation, Collection<ConfigAttribute> attributes) {
         ConfigAttribute configAttribute = ((ArrayList<ConfigAttribute>) attributes).get(0);
-        if (Permissions.check(Users.get(authentication.getName()), Integer.parseInt(configAttribute.getAttribute()))) {
+        Menus.InnerMenu innerMenu = Menus.getInnerByModuleId(Integer.parseInt(configAttribute.getAttribute()));
+        if (innerMenu != null && innerMenu.checkPermission(Users.get(authentication.getName()))) {
             return ACCESS_GRANTED;
         }
         return ACCESS_ABSTAIN;

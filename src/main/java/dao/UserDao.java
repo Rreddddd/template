@@ -2,6 +2,7 @@ package dao;
 
 import entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,11 +13,15 @@ public interface UserDao {
 
     List<User> findAll();
 
-    Integer add(User user);
+    void add(User user);
 
     void update(User user);
 
-    void delete(String account);
+    void delete(@Param("id") int id);
 
-    User findById(int id);
+    User findById(@Param("id") int id);
+
+    List<User> getWithPositionAll();
+
+    User findWidthPositionById(int id);
 }

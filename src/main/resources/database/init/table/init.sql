@@ -6,7 +6,7 @@ CREATE TABLE `user`
     `account`     varchar(50)  NOT NULL COMMENT '登录用户名',
     `password`    varchar(50)  NOT NULL COMMENT '登录密码',
     `name`        varchar(20)  NOT NULL COMMENT '姓名',
-    `phone`       int(11)      NULL COMMENT '移动电话号码',
+    `phone`       char(11)      NULL COMMENT '移动电话号码',
     `email`       varchar(50)  NULL COMMENT '邮箱',
     `head_img`    varchar(100) NULL COMMENT '头像相对路径',
     `create_time` datetime     NOT NULL COMMENT '创建时间',
@@ -39,7 +39,7 @@ CREATE TABLE `module`
 DROP TABLE IF EXISTS `menu`;
 CREATE TABLE `menu`
 (
-    `id`         int(11)     NOT NULL AUTO_INCREMENT,
+    `id`         int(11)     NOT NULL,
     `parent_id`  int(11)     NOT NULL DEFAULT '-1' COMMENT '父级id',
     `module_id`  int(11)     NULL COMMENT '模块id',
     `title`      varchar(20) NOT NULL COMMENT '菜单名称',
@@ -91,9 +91,13 @@ insert into user_position
 values (1, 1);
 
 insert into module
-values (1, '模块管理', '/sys/module');
+values (null, '模块管理', '/sys/module');
 insert into module
-values (2, '导航管理', '/sys/menu');
+values (null, '导航管理', '/sys/menu');
+insert into module
+values (null, '人员职位', '/sys/position');
+insert into module
+values (null, '人员管理', '/sys/user');
 
 insert into menu
 values (1, -1, null, '系统管理', 'iconfont icon-xitongguanli', '#6666fb', 0);
@@ -101,3 +105,7 @@ insert into menu
 values (2, 1, 1, '模块管理', 'iconfont icon-huaban61', '#7982fc', 1);
 insert into menu
 values (3, 1, 2, '导航管理', 'iconfont icon-daohang', '#0079ff', 2);
+insert into menu
+values (4, 1, 3, '人员职位', 'iconfont icon-pipeizhiwei', '#0079ff', 3);
+insert into menu
+values (5, 1, 4, '人员管理', 'iconfont icon-renyuan', '#0079ff', 4);

@@ -63,7 +63,7 @@
     border: 1px solid #dddddd;
     background-color: #ffffff;
     text-align: left;
-    z-index: 99999;
+    z-index: 10000;
 }
 .smart-select-panel.sortable .tree-node-icon{
     cursor: default;
@@ -140,6 +140,9 @@
     background: none !important;
     color: #666666 !important;
     cursor: default !important;
+}
+.panel-tree-wrapper .smart-tree-node.selectable.selected{
+    background-color: #ffe48d;
 }
 .tree-node-expanded, .tree-node-collapsed, .tree-node-folder, .tree-node-file, .tree-node-checkbox, .tree-node-indent {
     display: inline-block;

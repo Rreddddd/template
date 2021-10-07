@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/login.css"/>
     <script src="${pageContext.request.contextPath}/global/jquery-1.11.3.js"></script>
     <script src="${pageContext.request.contextPath}/pc/js/login.js"></script>
+    <style type="text/css">
+        .form-row > .edit-wrapper{
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
 <div class="login-window" id="login-window">

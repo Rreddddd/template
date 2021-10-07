@@ -2,6 +2,7 @@ package entity;
 
 import util.SerialCloneAble;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Position extends SerialCloneAble {
@@ -9,6 +10,7 @@ public class Position extends SerialCloneAble {
     private Integer id;
     private String name;
     private boolean visible;
+    private List<User> users;
 
     public static final Position ADMIN_POSITION = new Position(1, "超级管理员", false);
 
@@ -43,6 +45,14 @@ public class Position extends SerialCloneAble {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     @Override

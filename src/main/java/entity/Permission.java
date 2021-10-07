@@ -4,31 +4,48 @@ import java.util.Objects;
 
 public class Permission {
 
-    private Integer id;
-    private PermissionId pid;
+    private int id;
+    private int authId;
+    private String authName;
+    private int type;
     private int menuId;
+
+    public static final int USER_TYPE = 0;
+    public static final int POSITION_TYPE = 1;
 
     public Permission() {
     }
 
-    public Permission(PermissionId id) {
-        this.pid = id;
-    }
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public PermissionId getPid() {
-        return pid;
+    public int getAuthId() {
+        return authId;
     }
 
-    public void setPid(PermissionId pid) {
-        this.pid = pid;
+    public void setAuthId(int authId) {
+        this.authId = authId;
+    }
+
+    public String getAuthName() {
+        return authName;
+    }
+
+    public void setAuthName(String authName) {
+        this.authName = authName;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getMenuId() {

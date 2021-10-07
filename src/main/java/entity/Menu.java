@@ -4,7 +4,7 @@ import util.SerialCloneAble;
 
 public class Menu extends SerialCloneAble {
 
-    private Integer id;
+    private int id;
     private int parentId;
     private Module module;
     private String title;
@@ -12,11 +12,11 @@ public class Menu extends SerialCloneAble {
     private String iconColor;
     private int order;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -4,11 +4,17 @@
 
     <resultMap id="permission" type="Permission">
         <result column="id" property="id"/>
+        <result column="auth_id" property="authId"/>
+        <result column="type" property="type"/>
         <result column="menu_id" property="menuId"/>
-        <association property="id" javaType="PermissionId">
-            <id column="auth_id" property="authId"/>
-            <id column="type" property="type"/>
-        </association>
+    </resultMap>
+
+    <resultMap id="permissionWithName" type="Permission">
+        <result column="id" property="id"/>
+        <result column="auth_id" property="authId"/>
+        <result column="type" property="type"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="authName" property="authName"/>
     </resultMap>
 
     <select id="findAll" resultMap="permission">
@@ -18,4 +24,34 @@
                p.menu_id
         from permission p
     </select>
+
+    <select id="findWithNameAll" resultMap="permissionWithName">
+        select p.id,
+               p.auth_id,
+               p.type,
+               p.menu_id,
+               ifnull(u.name, poi.name) authName
+        from permission p
+                 left join user u on p.auth_id = u.id
+                 left join position poi on p.auth_id = poi.id
+    </select>
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into permission
+        values
+        <foreach collection="permissions" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.authId},
+            #{item.type},
+            #{item.menuId}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteAll">
+        delete
+        from permission
+
+    </delete>
 </mapper>

@@ -1,38 +1,61 @@
 package service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import dao.UserAndPositionDao;
 import dao.UserDao;
+import entity.Position;
 import entity.User;
+import entity.UserAndPosition;
 import org.springframework.stereotype.Service;
 import service.UserService;
 import util.Users;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Resource
     private UserDao userDao;
+    @Resource
+    private UserAndPositionDao userAndPositionDao;
 
     @Override
     public int add(User user) {
-        Integer id = user.getId();
         if (user.getId() == null) {
-            id = userDao.add(user);
+            userDao.add(user);
             Users.put(user);
         } else {
             userDao.update(user);
             Users.update(user);
         }
-        return id;
+        userAndPositionDao.removeByUserId(user.getId());
+        List<Position> positions = user.getPositions();
+        if (positions != null && positions.size() > 0) {
+            List<UserAndPosition> userAndPositions = new ArrayList<>();
+            for (Position position : positions) {
+                userAndPositions.add(new UserAndPosition(user.getId(), position.getId()));
+            }
+            userAndPositionDao.addList(userAndPositions);
+        }
+        return user.getId();
     }
 
     @Override
-    public void delete(String account) {
-        userDao.delete(account);
-        Users.remove(account);
+    public void deleteByAccount(String account) {
+
+    }
+
+    @Override
+    public void delete(int id) {
+        User user = findById(id);
+        if (user != null) {
+            userDao.delete(id);
+            Users.remove(user.getAccount());
+        }
     }
 
     @Override
@@ -46,6 +69,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(int id) {
         return userDao.findById(id);
+    }
+
+    @Override
+    public User findWidthPositionById(int id) {
+        return userDao.findWidthPositionById(id);
     }
 
     /**
@@ -62,11 +90,22 @@ public class UserServiceImpl implements UserService {
         return user.getPassword().equals(password) ? 2 : 1;
     }
 
+    @Override
+    public List<User> getWithPositionAll() {
+        return userDao.getWithPositionAll();
+    }
+
+    @Override
+    public void update(User user) {
+        User oldUser = findWidthPositionById(user.getId());
+        user.setPositions(oldUser.getPositions());
+        add(user);
+    }
+
     /**
-     * 启动放入内存
+     * 启动放入内存 在职位后放入
      */
-    @PostConstruct
-    private void initCache() {
-        Users.init(userDao.findAll());
+    void initCache() {
+        Users.init(userDao.getWithPositionAll());
     }
 }

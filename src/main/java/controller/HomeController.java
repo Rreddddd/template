@@ -37,7 +37,7 @@ public class HomeController {
         user = userService.findById(user.getId());
         String absoluteTempPath = WebPathUtil.ensureAbsolutePath(WebPathUtil.convertToUrl(uri));
         user.setHeadImg(WebPathUtil.getRelativePath(WebPathUtil.copyTempToFile(absoluteTempPath)));
-        userService.add(user);
+        userService.update(user);
         return MsgResult.success();
     }
 
@@ -57,7 +57,7 @@ public class HomeController {
             }
             currentUser.setPassword(passwordEncoder.encode(userBean.getNewPwd()));
         }
-        userService.add(currentUser);
+        userService.update(currentUser);
         return MsgResult.success();
     }
 }

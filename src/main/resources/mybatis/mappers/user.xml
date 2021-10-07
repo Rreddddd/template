@@ -12,6 +12,9 @@
         <result column="head_img" property="headImg"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="freeze" property="freeze"/>
+    </resultMap>
+
+    <resultMap id="userWithPosition" type="User" extends="user">
         <collection property="positions" javaType="ArrayList" ofType="Position">
             <id column="pId" property="id"/>
             <result column="pName" property="name"/>
@@ -25,7 +28,7 @@
             p.visible
     </sql>
 
-    <sql id="user_position_fields">
+    <sql id="user_fields">
         u.id as uId,
         u.account,
         u.password,
@@ -34,7 +37,12 @@
         u.email,
         u.head_img,
         u.create_time,
-        u.freeze,
+        u.freeze
+    </sql>
+
+    <sql id="user_position_fields">
+        <include refid="user_fields"/>
+        ,
         <include refid="position_fields"/>
     </sql>
 
@@ -64,6 +72,12 @@
 
     <select id="findAll" resultMap="user">
         select
+        <include refid="user_fields"/>
+        from user u
+    </select>
+
+    <select id="getWithPositionAll" resultMap="userWithPosition">
+        select
         <include refid="user_position_fields"/>
         from user u left join user_position up on u.id = up.user_id
         left join position p on up.position_id = p.id
@@ -71,13 +85,20 @@
 
     <select id="findById" resultMap="user">
         select
+        <include refid="user_fields"/>
+        from user u
+        where u.id = #{id}
+    </select>
+
+    <select id="findWidthPositionById" resultMap="userWithPosition">
+        select
         <include refid="user_position_fields"/>
         from user u left join user_position up on u.id = up.user_id
         left join position p on up.position_id = p.id
         where u.id = #{id}
     </select>
 
-    <insert id="add" parameterType="User">
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="User">
         insert into user
         values (null, #{account}, #{password}, #{name}, #{phone}, #{email}, #{headImg}, #{createTime}, #{freeze});
     </insert>

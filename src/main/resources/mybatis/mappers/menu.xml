@@ -9,6 +9,9 @@
         <result column="icon_class" property="iconClass"/>
         <result column="icon_color" property="iconColor"/>
         <result column="_order" property="order"/>
+    </resultMap>
+
+    <resultMap id="menuWithModule" type="Menu" extends="menu">
         <association property="module" javaType="Module">
             <id column="moId" property="id"/>
             <result column="moTitle" property="title"/>
@@ -17,17 +20,48 @@
     </resultMap>
 
     <select id="findByParentId" resultMap="menu">
-        select m.id as mId,
+        select m.id    as mId,
                m.parent_id,
                m.title as mTitle,
                m.icon_class,
                m.icon_color,
+               m._order
+        from menu m
+        where m.parent_id = #{parentId}
+    </select>
+
+    <select id="findWithModuleAll" resultMap="menuWithModule">
+        select m.id     as mId,
+               m.parent_id,
+               m.title  as mTitle,
+               m.icon_class,
+               m.icon_color,
                m._order,
-               mo.id as moId,
+               mo.id    as moId,
                mo.title as moTitle,
                mo.url
         from menu m
                  left join module mo on m.module_id = mo.id
-        where m.parent_id = #{parentId}
+        order by m.id
     </select>
+
+    <insert id="save" useGeneratedKeys="false" parameterType="List">
+        insert into menu values
+        <foreach collection="menus" item="item" index="index" separator=",">
+            (
+            #{item.id},
+            #{item.parentId},
+            #{item.module.id},
+            #{item.title},
+            #{item.iconClass},
+            #{item.iconColor},
+            #{item.order}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteAll">
+        delete
+        from menu
+    </delete>
 </mapper>

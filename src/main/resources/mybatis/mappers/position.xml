@@ -8,6 +8,16 @@
         <result column="visible" property="visible"/>
     </resultMap>
 
+    <resultMap id="positionWithUser" type="Position">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="visible" property="visible"/>
+        <collection property="users" javaType="ArrayList" ofType="User">
+            <id column="uId" property="id"/>
+            <result column="uName" property="name"/>
+        </collection>
+    </resultMap>
+
     <select id="findByUserId" resultMap="position">
         select p.id,
                p.name,
@@ -15,4 +25,41 @@
         from position p
                  join user_position up on up.user_id = #{userId} and p.id = up.position_id
     </select>
+
+    <select id="getAll" resultMap="position">
+        select p.id,
+               p.name,
+               p.visible
+        from position p
+        order by p.name
+    </select>
+
+    <select id="getWidthUserAll" resultMap="positionWithUser">
+        select p.id,
+               p.name,
+               p.visible,
+               u.id   uId,
+               u.name uName
+        from position p
+                 left join user_position up on p.id = up.position_id
+                 left join user u on up.user_id = u.id
+        order by p.name
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Position">
+        insert into position
+        values (null, #{name}, true)
+    </insert>
+
+    <insert id="update" parameterType="Position">
+        update position
+        set name=#{name}
+        where id = #{id}
+    </insert>
+
+    <delete id="delete">
+        delete
+        from position
+        where id = #{id}
+    </delete>
 </mapper>

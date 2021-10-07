@@ -1,8 +1,6 @@
 package service;
 
 import entity.Module;
-import pojo.TableData;
-
 import java.util.List;
 
 public interface ModuleService {
