@@ -61,14 +61,17 @@ public class UserController {
     public MsgResult update(@RequestBody User user) {
         try {
             User oldUser = userService.findById(user.getId());
+            if(oldUser.getAccount().equals(User.ADMIN_ACCOUNT)){
+                return MsgResult.failure("修改失败");
+            }
             if (StringUtils.isNotBlank(user.getPassword())) {
-                oldUser.setPassword(passwordEncoder.encode(oldUser.getPassword()));
+                oldUser.setPassword(passwordEncoder.encode(user.getPassword()));
             }
             oldUser.setName(user.getName());
             oldUser.setPhone(user.getPhone());
             oldUser.setEmail(user.getEmail());
             oldUser.setPositions(user.getPositions());
-            userService.update(oldUser);
+            userService.add(oldUser);
             return MsgResult.success();
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,7 +82,27 @@ public class UserController {
     @PostMapping("/delete")
     public MsgResult delete(@RequestParam(value = "id") int id) {
         try {
+            User user = userService.findWidthPositionById(id);
+            if(user.getAccount().equals(User.ADMIN_ACCOUNT)){
+                return MsgResult.failure("修改失败");
+            }
             userService.delete(id);
+            return MsgResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return MsgResult.failure();
+        }
+    }
+
+    @PostMapping("/freeze")
+    public MsgResult freeze(@RequestParam(value = "id") int id, @RequestParam(value = "freeze") boolean freeze) {
+        try {
+            User user = userService.findWidthPositionById(id);
+            if(user.getAccount().equals(User.ADMIN_ACCOUNT)){
+                return MsgResult.failure("修改失败");
+            }
+            user.setFreeze(freeze);
+            userService.add(user);
             return MsgResult.success();
         } catch (Exception e) {
             e.printStackTrace();

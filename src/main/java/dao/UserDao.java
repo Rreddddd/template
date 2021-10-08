@@ -24,4 +24,6 @@ public interface UserDao {
     List<User> getWithPositionAll();
 
     User findWidthPositionById(int id);
+
+    void freeze(@Param("id") int id, @Param("freeze") boolean freeze);
 }

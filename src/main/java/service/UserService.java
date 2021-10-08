@@ -25,4 +25,5 @@ public interface UserService {
 
     void update(User user);
 
+    void freeze(int id, boolean freeze);
 }

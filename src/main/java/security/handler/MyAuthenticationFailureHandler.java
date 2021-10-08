@@ -28,7 +28,7 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
                     msgResult.setErrorCode(2);
                     msgResult.setMsg("验证码错误");
                 } else if (_verifyState == Constant.VERIFY_STATUS_EXPIRED) {
-                    msgResult.setErrorCode(3);
+                    msgResult.setErrorCode(4);
                     msgResult.setMsg("验证码过期");
                 }
                 httpServletResponse.getOutputStream().write(new ObjectMapper().writeValueAsBytes(msgResult));
@@ -40,6 +40,8 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
             msgResult.setMsg("用户不存在");
         } else if (status == 1) {
             msgResult.setMsg("用户名或者密码错误");
+        } else if (status == 3) {
+            msgResult.setMsg("用户已被冻结");
         } else {
             msgResult.setMsg("系统错误");
         }

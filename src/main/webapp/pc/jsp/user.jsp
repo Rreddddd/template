@@ -33,16 +33,48 @@
                             },
                             {
                                 title: "操作",
-                                field: "operate",
+                                field: "freeze",
                                 align: "center",
                                 width: "20%",
                                 formatter: function (index, field, rowData) {
-                                    let operate = $('<button class="form-editor update">修改</button><button class="form-editor delete">删除</button>');
+                                    if(rowData.account==="admin"){
+                                        return '';
+                                    }
+                                    let freeze = rowData.freeze;
+                                    let operate = $('<button class="form-editor update">修改</button>' +
+                                        '<button class="form-editor delete">删除</button>' +
+                                        '<button class="form-editor ' + (freeze ? 'add' : 'update') + '">' + (freeze ? '解冻' : '冻结') + '</button>');
                                     operate.eq(0).on("click", function () {
                                         edit(rowData);
                                     });
                                     operate.eq(1).on("click", function () {
                                         remove(rowData);
+                                    });
+                                    let freezeState = false;
+                                    let freezeBtn = operate.eq(2).on("click", function () {
+                                        if (freezeState) {
+                                            return;
+                                        }
+                                        freezeState = true;
+                                        let freeze = freezeBtn.hasClass("update");
+                                        $.ajax({
+                                            type: "post",
+                                            url: "/sys/user/freeze",
+                                            data: {
+                                                id: rowData.id,
+                                                freeze: freeze
+                                            },
+                                            dataType: "json",
+                                            success: function (msg) {
+                                                freezeState = false;
+                                                if (msg.errorCode === 0) {
+                                                    freezeBtn.attr("class", "form-editor " + (freeze ? "add" : "update")).text(freeze ? '解冻' : '冻结');
+                                                    $.alert("已"+(!freeze ? '解冻' : '冻结')+"“" + rowData.name + "”");
+                                                } else {
+                                                    $.alert((!freeze ? '解冻' : '冻结')+"“" + rowData.name + "”失败");
+                                                }
+                                            }
+                                        });
                                     });
                                     return operate;
                                 }

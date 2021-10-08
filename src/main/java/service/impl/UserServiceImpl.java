@@ -6,11 +6,12 @@ import dao.UserDao;
 import entity.Position;
 import entity.User;
 import entity.UserAndPosition;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
+import security.MyDelegatingPasswordEncoder;
 import service.UserService;
 import util.Users;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,10 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
     @Resource
     private UserAndPositionDao userAndPositionDao;
+    @Resource
+    private MyDelegatingPasswordEncoder passwordEncoder;
+    @Resource
+    private SessionRegistry sessionRegistry;
 
     @Override
     public int add(User user) {
@@ -41,6 +46,9 @@ public class UserServiceImpl implements UserService {
             }
             userAndPositionDao.addList(userAndPositions);
         }
+        if (user.isFreeze()) {
+            freeze(user);
+        }
         return user.getId();
     }
 
@@ -55,6 +63,9 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             userDao.delete(id);
             Users.remove(user.getAccount());
+            if (user.isFreeze()) {
+                freeze(user);
+            }
         }
     }
 
@@ -79,7 +90,7 @@ public class UserServiceImpl implements UserService {
     /**
      * @param account  用户名
      * @param password 密码
-     * @return 0无此账户 1密码错误 2成功
+     * @return 0无此账户 1密码错误 2成功 3冻结
      */
     @Override
     public int verifyAccountAndPassword(String account, String password) {
@@ -87,6 +98,10 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return 0;
         }
+        if (user.isFreeze()) {
+            return 3;
+        }
+        password = passwordEncoder.encode(password);
         return user.getPassword().equals(password) ? 2 : 1;
     }
 
@@ -100,6 +115,39 @@ public class UserServiceImpl implements UserService {
         User oldUser = findWidthPositionById(user.getId());
         user.setPositions(oldUser.getPositions());
         add(user);
+    }
+
+    @Override
+    public void freeze(int id, boolean freeze) {
+        userDao.freeze(id, freeze);
+        User user = userDao.findWidthPositionById(id);
+        Users.update(user);
+        if (freeze) {
+            freeze(user);
+        }
+    }
+
+    /**
+     * 冻结/删除 用户，删除session信息
+     *
+     * @param user 人员
+     */
+    public void freeze(User user) {
+        List<Object> users = sessionRegistry.getAllPrincipals(); // 获取session中所有的用户信息
+        for (Object principal : users) {
+            System.out.println("");
+//            if (principal instanceof LoginUser) {
+//                final LoginUser loggedUser = (LoginUser) principal;
+//                if (username.equals(loggedUser.getUsername())) {
+//                    List<SessionInformation> sessionsInfo = sessionRegistry.getAllSessions(principal, false); // false代表不包含过期session
+//                    if (null != sessionsInfo && sessionsInfo.size() > 0) {
+//                        for (SessionInformation sessionInformation : sessionsInfo) {
+//                            sessionInformation.expireNow();
+//                        }
+//                    }
+//                }
+//            }
+        }
     }
 
     /**

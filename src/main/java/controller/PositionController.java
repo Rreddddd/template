@@ -61,6 +61,9 @@ public class PositionController {
     @PostMapping("/delete")
     public MsgResult delete(@RequestParam(value = "id") int id) {
         try {
+            if (Position.ADMIN_POSITION.getId() == id) {
+                return MsgResult.failure("删除失败");
+            }
             positionService.delete(id);
             return MsgResult.success();
         } catch (Exception e) {

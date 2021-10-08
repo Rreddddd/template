@@ -48,7 +48,7 @@ $(function () {
                     displayWarn(msg.msg || "登录失败");
                     clickable = true;
                 } else {
-                    if (msg.errorCode === 3) {
+                    if (msg.errorCode === 4) {
                         captcha.val("");
                         captcha_img.click();
                     }

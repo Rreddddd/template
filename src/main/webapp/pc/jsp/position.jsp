@@ -17,7 +17,7 @@
                             {
                                 title: "已分配人员", field: "users", align: "left", width: "50%",
                                 formatter: function (index, field, rowData) {
-                                    let users=rowData.users;
+                                    let users = rowData.users;
                                     if (!users || users.length === 0) {
                                         return "";
                                     }
@@ -38,9 +38,13 @@
                                     operate.eq(0).on("click", function () {
                                         edit(rowData);
                                     });
-                                    operate.eq(1).on("click", function () {
-                                        remove(rowData);
-                                    });
+                                    if (rowData.id === 1) {
+                                        operate.eq(1).hide();
+                                    }else{
+                                        operate.eq(1).on("click", function () {
+                                            remove(rowData);
+                                        });
+                                    }
                                     return operate;
                                 }
                             }
@@ -58,12 +62,12 @@
                             return;
                         }
                         let users = addModal.find("input[name='users']").val();
-                        let persons=[];
-                        if(users){
+                        let persons = [];
+                        if (users) {
                             let split = users.split(",");
-                            for(let i=0;i<split.length;i++){
+                            for (let i = 0; i < split.length; i++) {
                                 persons.push({
-                                    id : split[i]
+                                    id: split[i]
                                 });
                             }
                         }
@@ -116,12 +120,12 @@
                 let usersInput = addModal.find("input[name='users']");
                 usersInput.val("").clearTag();
                 let users = rowData.users;
-                if(users && users.length>0){
-                    for(let i=0;i<users.length;i++){
+                if (users && users.length > 0) {
+                    for (let i = 0; i < users.length; i++) {
                         usersInput.addTag({
-                            id : users[i].id+"",
-                            value : users[i].name
-                        },{
+                            id: users[i].id + "",
+                            value: users[i].name
+                        }, {
                             focus: true,
                             color: "#0079ff"
                         });

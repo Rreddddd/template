@@ -109,6 +109,12 @@
         where u.id = #{id}
     </update>
 
+    <update id="freeze">
+        update user u set
+        u.freeze=#{freeze}
+        where u.id = #{id}
+    </update>
+
     <delete id="delete">
         delete
         from user

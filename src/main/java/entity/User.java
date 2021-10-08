@@ -20,6 +20,8 @@ public class User extends SerialCloneAble {
     private boolean freeze;
     private List<Position> positions;
 
+    public static final String ADMIN_ACCOUNT = "admin";
+
     public Integer getId() {
         return id;
     }
