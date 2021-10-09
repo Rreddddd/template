@@ -6,13 +6,16 @@ import dao.UserDao;
 import entity.Position;
 import entity.User;
 import entity.UserAndPosition;
+import org.springframework.security.core.session.SessionInformation;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 import security.MyDelegatingPasswordEncoder;
 import service.UserService;
+import service.UserTokenService;
 import util.Users;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private MyDelegatingPasswordEncoder passwordEncoder;
     @Resource
     private SessionRegistry sessionRegistry;
+    @Resource
+    private UserTokenService userTokenService;
 
     @Override
     public int add(User user) {
@@ -62,6 +67,8 @@ public class UserServiceImpl implements UserService {
         User user = findById(id);
         if (user != null) {
             userDao.delete(id);
+            //清空token
+            userTokenService.removeToken(user.getName());
             Users.remove(user.getAccount());
             if (user.isFreeze()) {
                 freeze(user);
@@ -118,11 +125,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void freeze(int id, boolean freeze) {
         userDao.freeze(id, freeze);
         User user = userDao.findWidthPositionById(id);
         Users.update(user);
         if (freeze) {
+            //先清空token
+            userTokenService.removeToken(user.getName());
             freeze(user);
         }
     }
@@ -132,21 +142,20 @@ public class UserServiceImpl implements UserService {
      *
      * @param user 人员
      */
-    public void freeze(User user) {
+    private void freeze(User user) {
         List<Object> users = sessionRegistry.getAllPrincipals(); // 获取session中所有的用户信息
         for (Object principal : users) {
-            System.out.println("");
-//            if (principal instanceof LoginUser) {
-//                final LoginUser loggedUser = (LoginUser) principal;
-//                if (username.equals(loggedUser.getUsername())) {
-//                    List<SessionInformation> sessionsInfo = sessionRegistry.getAllSessions(principal, false); // false代表不包含过期session
-//                    if (null != sessionsInfo && sessionsInfo.size() > 0) {
-//                        for (SessionInformation sessionInformation : sessionsInfo) {
-//                            sessionInformation.expireNow();
-//                        }
-//                    }
-//                }
-//            }
+            if (principal instanceof org.springframework.security.core.userdetails.User) {
+                org.springframework.security.core.userdetails.User loggedUser = (org.springframework.security.core.userdetails.User) principal;
+                if (user.getAccount().equals(loggedUser.getUsername())) {
+                    List<SessionInformation> sessionsInfo = sessionRegistry.getAllSessions(principal, false); // false代表不包含过期session
+                    if (null != sessionsInfo && sessionsInfo.size() > 0) {
+                        for (SessionInformation sessionInformation : sessionsInfo) {
+                            sessionInformation.expireNow();
+                        }
+                    }
+                }
+            }
         }
     }
 

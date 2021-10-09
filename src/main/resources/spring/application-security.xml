@@ -18,8 +18,6 @@
                    authentication-manager-ref="authenticationManager">
         <security:access-denied-handler error-page="/error/403"/>
 
-<!--        <security:session-management session-authentication-strategy-ref="registerSessionAuthenticationStrategy"/>-->
-
         <security:form-login login-page="/login"
                              login-processing-url="/loginUser"/>
         <security:logout logout-url="/logout" success-handler-ref="myLogoutSuccessHandler"/>
@@ -30,7 +28,6 @@
         <security:custom-filter ref="myFilterSecurityInterceptor" before="FILTER_SECURITY_INTERCEPTOR"/>
         <security:csrf disabled="true"/>
     </security:http>
-
 
 
     <bean id="myUserDetailsService" class="security.MyUserDetailsService"/>
@@ -61,7 +58,9 @@
     <bean id="myAuthenticationEntryPoint" class="security.MyAuthenticationEntryPoint"/>
     <bean id="myAuthenticationProvider" class="security.provider.MyAuthenticationProvider"/>
     <!--    登录处理器-->
-    <bean id="myAuthenticationSuccessHandler" class="security.handler.MyAuthenticationSuccessHandler"/>
+    <bean id="myAuthenticationSuccessHandler" class="security.handler.MyAuthenticationSuccessHandler">
+        <property name="sessionStrategy" ref="sessionAuthenticationStrategy"/>
+    </bean>
     <bean id="myAuthenticationFailureHandler" class="security.handler.MyAuthenticationFailureHandler"/>
     <!--    验证码过滤器-->
     <bean id="myUsernamePasswordAuthenticationFilter" class="security.filter.MyUsernamePasswordAuthenticationFilter">
@@ -70,6 +69,7 @@
         <property name="authenticationSuccessHandler" ref="myAuthenticationSuccessHandler"/>
         <property name="authenticationFailureHandler" ref="myAuthenticationFailureHandler"/>
         <property name="rememberMeServices" ref="myRememberMeServices"/>
+        <property name="sessionAuthenticationStrategy" ref="registerSessionAuthenticationStrategy"/>
     </bean>
     <!--    记住我-->
     <bean id="myPersistentTokenRepository" class="security.MyPersistentTokenRepository"/>
@@ -105,8 +105,16 @@
     <!--   url验证成功后事件监听 -->
     <bean id="publishAuthorizationSuccessListener" class="security.listener.PublishAuthorizationSuccessListener"/>
     <!--   用来踢人 -->
-    <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl"/>
-    <bean id="registerSessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy">
+    <bean id="sessionRegistry" class="security.SessionRegistryFactory" factory-method="getSingletonInstance"/>
+    <bean id="registerSessionAuthenticationStrategy"
+          class="org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy">
         <constructor-arg index="0" ref="sessionRegistry"/>
+    </bean>
+    <bean id="sessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+        <constructor-arg index="0">
+            <list>
+                <ref bean="registerSessionAuthenticationStrategy"/>
+            </list>
+        </constructor-arg>
     </bean>
 </beans>
