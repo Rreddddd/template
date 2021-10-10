@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.PropertyDao">
+
+    <resultMap id="property" type="Property">
+        <id column="id" property="id"/>
+        <result column="target_id" property="targetId"/>
+        <result column="key" property="key"/>
+        <result column="value" property="value"/>
+    </resultMap>
+
+    <select id="get" resultMap="property">
+        select p.id, p.target_id, p.`key`, p.value
+        from property p
+        where p.target_id = #{targetId}
+          and p.key = #{key}
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="Property">
+        insert into property
+        values (null, #{targetId}, #{key}, #{value});
+    </insert>
+
+    <update id="updateValue" parameterType="Property">
+        update property
+        set value=#{value}
+        where target_id = #{targetId}
+          and `key` = #{key}
+    </update>
+</mapper>

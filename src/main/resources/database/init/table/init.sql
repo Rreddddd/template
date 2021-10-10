@@ -78,6 +78,16 @@ CREATE TABLE `user_position`
     `position_id` int(11) NOT NULL,
     PRIMARY KEY (`user_id`, `position_id`)
 );
+-- 属性设置
+DROP TABLE IF EXISTS `property`;
+CREATE TABLE `property` (
+                            `id`  int(11) NOT NULL AUTO_INCREMENT ,
+                            `target_id`  int(11) NOT NULL ,
+                            `key`  varchar(50) NOT NULL ,
+                            `value`  varchar(500) NULL ,
+                            PRIMARY KEY (`id`),
+                            INDEX `index1` (`target_id`, `key`, `value`) USING BTREE
+);
 
 insert into user
 values (null, 'admin', '{red}{red1}ac360b7295f9c09b7a284df3d2be2659', 'Administrator', null, null, null, now(), 0);
@@ -109,3 +119,5 @@ insert into menu
 values (4, 1, 3, '人员职位', 'iconfont icon-pipeizhiwei', '#0079ff', 3);
 insert into menu
 values (5, 1, 4, '人员管理', 'iconfont icon-renyuan', '#0079ff', 4);
+
+insert into property values(null,-1,'default_leave_msg','');

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import pojo.MsgResult;
 import security.MyDelegatingPasswordEncoder;
-import security.UserPasswordEncoder;
 import service.UserService;
 import util.Context;
 import util.StringUtils;

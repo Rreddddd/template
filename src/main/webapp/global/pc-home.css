@@ -256,6 +256,10 @@
     padding-left: 33px;
     font-size: 20px;
 }
+.container>.context>.menu>.toolbar>.company-icon{
+    cursor: pointer;
+    color: #f9f9f9;
+}
 .container>.context>.menu>.toolbar>.handrail{
     line-height: 68px;
     width: 40px;
@@ -303,6 +307,28 @@
 }
 .container>.context>.activity>.toolbar>.toolbar-item.menu-btn{
     cursor: pointer;
+}
+.container>.context>.activity>.toolbar>.toolbar-item.icons{
+    margin-left: 40px;
+    font-size: 24px;
+}
+.container>.context>.activity>.toolbar>.toolbar-item.icons>i{
+    color: #387dd4;
+    font-weight: bold;
+    position: relative;
+}
+.container>.context>.activity>.toolbar>.toolbar-item.icons>i>.count{
+    position: absolute;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: red;
+    color: #ffffff;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    letter-spacing: 0;
 }
 .container>.context>.activity>.toolbar>.toolbar-item>.menu-icon{
     position: relative;
@@ -560,4 +586,26 @@
 }
 .user-info-container .pwd-area.show{
     display: block;
+}
+
+.msg-pop-window{
+    width: 300px;
+}
+.msg-pop-window>.msg-state{
+    border-bottom: 1px solid #e2e2e2;
+    padding: 5px;
+}
+.msg-pop-window>.msg-state>button{
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: 5px;
+    outline: #889ef1;
+}
+.msg-pop-window>.msg-state>button.active{
+    box-shadow: 0 0 4px #1656e6;
+}
+.msg-pop-window>.msg-state>.setting{
+    float: right;
+    font-size: 16px;
+    cursor: pointer;
 }

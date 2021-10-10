@@ -7,6 +7,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entity.Module" %>
+<%@ page import="service.impl.PropertyServiceImpl" %>
+<%@ page import="pojo.Constant" %>
+<%@ page import="entity.Property" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://www.0512.red/tags" %>
@@ -35,6 +38,9 @@
         positionName = "- -";
     }
     Module activeModule = Context.getActiveModule();
+    PropertyServiceImpl propertyService = PropertyServiceImpl.getInstance();
+    Property property = propertyService.get(Constant.PROPERTY_BROADCAST_IM);
+    boolean broadcastImState = property != null && "true".equals(property.getValue());
 %>
 <t:template id="pc-home">
     <html>
@@ -42,11 +48,13 @@
         <title><t:TemplatePlaceholder id="title"/><%=activeModule == null ? "- -" : activeModule.getTitle()%>
         </title>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/iconfont/iconfont.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/viewer.min.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/pc/css/modal.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-base.css"/>
         <link rel="stylesheet" href="${pageContext.request.contextPath}/global/pc-home.css"/>
         <script src="${pageContext.request.contextPath}/global/jquery-1.11.3.js"></script>
         <script src="${pageContext.request.contextPath}/global/jquery.nicescroll.min.js"></script>
+        <script src="${pageContext.request.contextPath}/pc/js/viewer.min.js"></script>
         <script src="${pageContext.request.contextPath}/global/pc-base.js"></script>
         <script src="${pageContext.request.contextPath}/pc/js/modal.js"></script>
         <script src="${pageContext.request.contextPath}/global/pc-home.js"></script>
@@ -55,6 +63,10 @@
                 let userJson = '<%=user.toJson()%>';
                 window.home.user = userJson ? JSON.parse(userJson) : undefined;
                 window.home.activeModuleId =<%=activeModule==null?0:activeModule.getId()%>;
+                window.home.property = {
+                    broadcastImState: <%=broadcastImState%>,
+                    imLeaveMsg: "<%=propertyService.getImLeaveMsg().getValue()%>"
+                };
             }();
         </script>
         <t:TemplatePlaceholder id="head"/>
@@ -64,7 +76,7 @@
         <div class="header">
             <div class="information">
                 <div class="head-img">
-                    <img src="<%=headImg%>" alt="暂无图片" id="user-head-img-max"/>
+                    <img src="<%=headImg%>" id="user-head-img-max"/>
                     <div>
                         <div>更改头像</div>
                     </div>
@@ -86,14 +98,8 @@
                 <ul>
                     <li>
                         <label>
-                            <input type="checkbox"/>
+                            <input type="checkbox" id="broadcast-im"/>
                             <span>消息</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="checkbox"/>
-                            <span>事件</span>
                         </label>
                     </li>
                 </ul>
@@ -102,7 +108,7 @@
         <div class="context">
             <div class="menu">
                 <div class="toolbar">
-                    <span class="company-icon">Rred</span>
+                    <a class="company-icon" href="/home">Rred</a>
                     <div class="handrail">
                         <i class="iconfont icon-shezhi1"></i>
                     </div>
@@ -116,6 +122,11 @@
                 <div class="toolbar">
                     <div class="toolbar-item menu-btn left">
                         <i class="menu-icon"></i>
+                    </div>
+                    <div class="toolbar-item icons left">
+                        <i class="iconfont icon-shouye" title="暂无新消息" id="msg-icon">
+                            <span class="count">5</span>
+                        </i>
                     </div>
                     <div class="toolbar-item self-info right">
                         <div class="head-img">

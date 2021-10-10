@@ -13,6 +13,7 @@
     <context:annotation-config/>
     <context:component-scan base-package="service.impl"/>
     <context:component-scan base-package="dao"/>
+    <context:component-scan base-package="websocket"/>
     <tx:annotation-driven/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

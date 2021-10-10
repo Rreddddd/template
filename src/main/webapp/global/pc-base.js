@@ -181,8 +181,22 @@
                             let records = msg.records || 0;
                             let pageCount = Math.ceil(records / params.pageSize);
                             let lis = '<li class="first">上一页</li>';
-                            for (let i = 1; i <= pageCount; i++) {
+                            let minPage=self.pageIndex - 3;
+                            if(minPage<=1){
+                                minPage=1;
+                            }else{
+                                lis += '<li data-index="' + 1 + '">' + 1 + '...</li>';
+                                minPage++;
+                            }
+                            let maxPage = Math.min(pageCount, self.pageIndex + 2);
+                            for (let i = minPage; i <= maxPage; i++) {
                                 lis += '<li data-index="' + i + '" class="' + (params.pageIndex === i ? ' active' : '') + '">' + i + '</li>';
+                            }
+                            maxPage++;
+                            if (maxPage === pageCount) {
+                                lis += '<li data-index="' + pageCount + '">' + pageCount + '</li>';
+                            } else if (maxPage < pageCount) {
+                                lis += '<li data-index="' + pageCount + '">...' + pageCount + '</li>';
                             }
                             lis += '<li class="last">下一页</li>';
                             self.jqElements.pager.data("pageCount", pageCount);

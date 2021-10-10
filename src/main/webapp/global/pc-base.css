@@ -237,6 +237,12 @@ button.form-editor.default:active {
     background-color: #dbd0d0;
 }
 
+textarea {
+    border-color: #e2e2e2;
+    outline: none;
+    padding: 5px;
+}
+
 /*抽屉窗口*/
 .pop-window-container{
     position: fixed;
@@ -297,6 +303,9 @@ button.form-editor.default:active {
 }
 .custom-table>.table-body{
     font-size: 13px;
+}
+.custom-table>.table-body tr:hover{
+    background-color: #d8e0f9;
 }
 .custom-table>.table-body td>.form-editor{
     margin: 0 10px;

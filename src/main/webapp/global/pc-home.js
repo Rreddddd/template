@@ -97,7 +97,9 @@
             userHeadImgModal.find(".user-head-img-container .btn").on("click", function () {
                 imgFileSelector.click();
             });
-            let userHeadImgMax = $("#user-head-img-max");
+            let userHeadImgMax = $("#user-head-img-max").on("click", function () {
+                userHeadImgMax.viewer();
+            }).viewer();
             let userHeadImgMin = $("#user-head-img-min");
             self.jqElements.header.find(".head-img>div>div").on("click", function () {
                 userHeadImgModal.modal({
@@ -272,6 +274,25 @@
                     }
                 });
             });
+            //消息开关处理
+            let broadcastImCheckbox = $("#broadcast-im").on("change", function () {
+                $.ajax({
+                    type: "post",
+                    url: "/common/updateProperty",
+                    data: {
+                        key: "property_broadcast_im",
+                        value: broadcastImCheckbox[0].checked
+                    },
+                    dataType: "json",
+                    success: function (msg) {
+                        if (msg.errorCode === 1) {
+                            $.alert("保存失败");
+                            broadcastImCheckbox[0].checked = !broadcastImCheckbox[0].checked;
+                        }
+                    }
+                });
+            });
+            broadcastImCheckbox[0].checked = home.property.broadcastImState;
             // 用户信息处理 end
             let handrailTimeout;
             self.jqElements.handrail.find(">i").on({
@@ -285,6 +306,9 @@
                         self.jqElements.header.addClass("show");
                     }
                     handrailTimeout = setTimeout(function () {
+                        if (msgIcon.data("state")) {
+                            msgIcon.popWindow("pop");
+                        }
                         home.trigger("container-resize");
                     }, 101);
                 },
@@ -411,9 +435,83 @@
                 cursorcolor: "#efefef",
                 cursorwidth: 10
             });
-            panelContainer.find(".panel-content").on("resize",function(){
+            panelContainer.find(".panel-content").on("resize", function () {
                 panelWrapper.resize();
             });
+            //消息处理
+            let msgIcon = $("#msg-icon").on("click", function () {
+                let state = msgIcon.data("state");
+                if (state) {
+                    msgIcon.popWindow("push");
+                } else {
+                    msgIcon.popWindow("pop");
+                }
+                msgIcon.data("state", !state);
+            }).data("state", false);
+            msgIcon.popWindow({
+                containerClass: "msg-pop-window",
+                right: 15,
+                onInit: function (container) {
+                    let msgState = $('<div class="msg-state">' +
+                        '<button data-state="idle" class="form-editor add active">空闲</button>' +
+                        '<button data-state="leave" class="form-editor default">离开</button>' +
+                        '<i class="setting iconfont icon-shezhi1"></i>' +
+                        '</div>').appendTo(container);
+                    msgState.find(">button").on("click", function () {
+                        let btn = $(this);
+                        if (btn.hasClass("active")) {
+                            return;
+                        }
+                        msgState.find(".active").removeClass("active");
+                        btn.addClass("active");
+                    });
+                    let leaveMsg = $('<div class="form-row">' +
+                        '<label class="edit-wrapper">' +
+                        '<span class="edit-title">离开自动回复 :</span>' +
+                        '<div class="edit-value">' +
+                        '<textarea cols="edit-control" style="resize: none;height: 100px;width: 100%" maxlength="255"></textarea>' +
+                        '</div>' +
+                        '</label>' +
+                        '</div>');
+                    let leaveText = leaveMsg.find("textarea").val(home.property.imLeaveMsg || "");
+                    msgState.find(".setting").on("click", function () {
+                        let modal = $.modal({
+                            title: "消息设置",
+                            width: 340,
+                            content: leaveMsg,
+                            onConfirm: function () {
+                                let text = leaveText.val().trim();
+                                $.ajax({
+                                    type: "post",
+                                    url: "/common/updateProperty",
+                                    data: {
+                                        key: "property_im_leave_msg",
+                                        value: text
+                                    },
+                                    dataType: "json",
+                                    success: function (msg) {
+                                        if (msg.errorCode === 0) {
+                                            modal.close();
+                                            $.alert("保存成功");
+                                        } else {
+                                            $.alert("保存失败");
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    });
+                    $('<div class="msg-list">' +
+                        '<ul>' +
+                        '<li>xxxxxxxxxxxxxxxxxxx</li>' +
+                        '<li>xxxxxxxxxxxxxxxxxxx</li>' +
+                        '<li>xxxxxxxxxxxxxxxxxxx</li>' +
+                        '</ul>' +
+                        '</div>').appendTo(container);
+                }
+            });
+            let url=(/^https/.test(window.location.origin)?"wss://":"ws://")+window.location.host+"/common/websocket";
+            let poSocket=new WebSocket(url);
         },
         toggleMenu: function () {
             let self = this;

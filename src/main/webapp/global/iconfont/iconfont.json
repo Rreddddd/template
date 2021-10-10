@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "201555",
+      "name": "表情",
+      "font_class": "biaoqing",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "765611",
+      "name": "消息",
+      "font_class": "shouye",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "1002631",
+      "name": "图片",
+      "font_class": "icon",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    },
+    {
       "icon_id": "1189644",
       "name": "匹配职位-填充",
       "font_class": "pipeizhiwei",
