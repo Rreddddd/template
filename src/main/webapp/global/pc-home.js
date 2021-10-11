@@ -448,6 +448,7 @@
                 }
                 msgIcon.data("state", !state);
             }).data("state", false);
+            let stateStr;
             msgIcon.popWindow({
                 containerClass: "msg-pop-window",
                 right: 15,
@@ -455,6 +456,7 @@
                     let msgState = $('<div class="msg-state">' +
                         '<button data-state="idle" class="form-editor add active">空闲</button>' +
                         '<button data-state="leave" class="form-editor default">离开</button>' +
+                        '<span class="state-str" style="color: red;margin-left: 44px;font-weight: bold;">断开连接</span>'+
                         '<i class="setting iconfont icon-shezhi1"></i>' +
                         '</div>').appendTo(container);
                     msgState.find(">button").on("click", function () {
@@ -465,6 +467,7 @@
                         msgState.find(".active").removeClass("active");
                         btn.addClass("active");
                     });
+                    stateStr=msgState.find(".state-str");
                     let leaveMsg = $('<div class="form-row">' +
                         '<label class="edit-wrapper">' +
                         '<span class="edit-title">离开自动回复 :</span>' +
@@ -512,6 +515,22 @@
             });
             let url=(/^https/.test(window.location.origin)?"wss://":"ws://")+window.location.host+"/common/websocket";
             let poSocket=new WebSocket(url);
+            poSocket.onopen=function(){
+                stateStr.text("连接中").css("color","green");
+                userNameMaxSpan.addClass("online");
+                audio.play().then(() => {});
+            };
+            poSocket.onclose=function(){
+                stateStr.text("断开连接").css("color","red");
+                userNameMaxSpan.removeClass("online");
+            };
+            poSocket.onerror=function(){
+                $.alert("连接聊天服务器失败");
+            };
+            poSocket.onmessage=function(event){
+                console.log(event);
+            };
+            window.audio=new Audio("/global/msg-hint.mp3");
         },
         toggleMenu: function () {
             let self = this;

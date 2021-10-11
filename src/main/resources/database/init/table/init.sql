@@ -6,7 +6,7 @@ CREATE TABLE `user`
     `account`     varchar(50)  NOT NULL COMMENT '登录用户名',
     `password`    varchar(50)  NOT NULL COMMENT '登录密码',
     `name`        varchar(20)  NOT NULL COMMENT '姓名',
-    `phone`       char(11)      NULL COMMENT '移动电话号码',
+    `phone`       char(11)     NULL COMMENT '移动电话号码',
     `email`       varchar(50)  NULL COMMENT '邮箱',
     `head_img`    varchar(100) NULL COMMENT '头像相对路径',
     `create_time` datetime     NOT NULL COMMENT '创建时间',
@@ -80,14 +80,52 @@ CREATE TABLE `user_position`
 );
 -- 属性设置
 DROP TABLE IF EXISTS `property`;
-CREATE TABLE `property` (
-                            `id`  int(11) NOT NULL AUTO_INCREMENT ,
-                            `target_id`  int(11) NOT NULL ,
-                            `key`  varchar(50) NOT NULL ,
-                            `value`  varchar(500) NULL ,
-                            PRIMARY KEY (`id`),
-                            INDEX `index1` (`target_id`, `key`, `value`) USING BTREE
+CREATE TABLE `property`
+(
+    `id`        int(11)      NOT NULL AUTO_INCREMENT,
+    `target_id` int(11)      NOT NULL,
+    `key`       varchar(50)  NOT NULL,
+    `value`     varchar(500) NULL,
+    PRIMARY KEY (`id`),
+    INDEX `index1` (`target_id`, `key`, `value`) USING BTREE
 );
+-- 访问记录
+DROP TABLE IF EXISTS `access_record`;
+CREATE TABLE `access_record`
+(
+    `id`      int(11)  NOT NULL AUTO_INCREMENT,
+    `user_id` int(11)  NOT NULL,
+    `type`    bit      NOT NULL,
+    `time`    datetime NOT NULL,
+    PRIMARY KEY (`id`)
+);
+-- 聊天记录
+DROP TABLE IF EXISTS `im_record`;
+CREATE TABLE `im_record`
+(
+    `id`         int(11)  NOT NULL AUTO_INCREMENT,
+    `series`     char(36) NOT NULL,
+    `from_id`    int(11)  NOT NULL,
+    `to_id`      int(11)  NOT NULL,
+    `content_id` int(11)  NOT NULL,
+    `read`       bit      NOT NULL,
+    `time`       datetime NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `index1` (`series`, `from_id`, `to_id`, `content_id`, `read`, `time`) USING BTREE
+);
+-- 聊天记录
+DROP TABLE IF EXISTS `im_content`;
+CREATE TABLE `im_content`
+(
+    `id`           int(11)      NOT NULL AUTO_INCREMENT,
+    `content`      varchar(512) NOT NULL,
+    `content_type` int(1)       NOT NULL,
+    PRIMARY KEY (`id`)
+)
+    DEFAULT CHARACTER SET = utf8mb4;
+-- 未读记录
+
+-- 未读列表
 
 insert into user
 values (null, 'admin', '{red}{red1}ac360b7295f9c09b7a284df3d2be2659', 'Administrator', null, null, null, now(), 0);
@@ -120,4 +158,5 @@ values (4, 1, 3, '人员职位', 'iconfont icon-pipeizhiwei', '#0079ff', 3);
 insert into menu
 values (5, 1, 4, '人员管理', 'iconfont icon-renyuan', '#0079ff', 4);
 
-insert into property values(null,-1,'default_leave_msg','');
+insert into property
+values (null, -1, 'default_leave_msg', '');
