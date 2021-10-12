@@ -111,9 +111,9 @@ CREATE TABLE `im_record`
     `read`       bit      NOT NULL,
     `time`       datetime NOT NULL,
     PRIMARY KEY (`id`),
-    INDEX `index1` (`series`, `from_id`, `to_id`, `content_id`, `read`, `time`) USING BTREE
+    INDEX `index1` (`series`, `to_id`, `from_id`, `content_id`, `read`, `time`) USING BTREE
 );
--- 聊天记录
+-- 聊天内容
 DROP TABLE IF EXISTS `im_content`;
 CREATE TABLE `im_content`
 (
@@ -123,9 +123,19 @@ CREATE TABLE `im_content`
     PRIMARY KEY (`id`)
 )
     DEFAULT CHARACTER SET = utf8mb4;
--- 未读记录
-
--- 未读列表
+-- 聊天列表
+DROP TABLE IF EXISTS `im_list`;
+CREATE TABLE `im_list`
+(
+    `id`              int(11)  NOT NULL AUTO_INCREMENT,
+    `user_id`         int(11)  NOT NULL,
+    `target_id`       int(11)  NOT NULL,
+    `origin`          bit      NOT NULL,
+    `last_content_id` int(11)  NOT NULL,
+    `content_time`    datetime NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `index1` (`user_id`, `target_id`, `last_content_id`, `time`) USING BTREE
+);
 
 insert into user
 values (null, 'admin', '{red}{red1}ac360b7295f9c09b7a284df3d2be2659', 'Administrator', null, null, null, now(), 0);
